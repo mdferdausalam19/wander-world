@@ -1,8 +1,22 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import useAuth from "../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 export default function Navbar() {
+  const { user, signOutUser, loading } = useAuth();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+      navigate("/sign-in");
+      toast.success("Sign out successful!");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 backdrop-blur-md">
@@ -57,27 +71,54 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <div className="relative group">
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                  Sign Out
+            {loading ? (
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            ) : user ? (
+              <div className="relative group">
+                <button className="flex items-center space-x-2 text-gray-700 hover:text-blue-500 focus:outline-none rounded-full">
+                  <img
+                    src={
+                      user.photoURL ||
+                      "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg"
+                    }
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full border"
+                  />
+                  <span className="hidden sm:block text-sm font-medium">
+                    {user.displayName || "User"}
+                  </span>
                 </button>
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Sign Out
+                  </button>
+                </div>
               </div>
-            </div>
-            <>
-              <Link
-                to="/sign-in"
-                className="text-gray-700 hover:text-blue-500 px-4 py-2 text-sm font-medium"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/sign-up"
-                className="bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded-full text-sm font-medium"
-              >
-                Sign Up
-              </Link>
-            </>
+            ) : (
+              <>
+                <Link
+                  to="/sign-in"
+                  className="text-gray-700 hover:text-blue-500 px-4 py-2 text-sm font-medium"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/sign-up"
+                  className="bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded-full text-sm font-medium"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -87,20 +128,48 @@ export default function Navbar() {
               <Link to="/" className="block text-gray-700 hover:text-blue-500">
                 Home
               </Link>
-              <>
-                <Link
-                  to="/sign-in"
-                  className="block text-gray-700 hover:text-blue-500"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/sign-up"
-                  className="block text-blue-500 font-semibold"
-                >
-                  Sign Up
-                </Link>
-              </>
+              {!loading && user && (
+                <>
+                  <div className="flex items-center space-x-3 pt-4 border-t border-gray-200">
+                    <img
+                      src={user.photoURL || "https://via.placeholder.com/32"}
+                      alt="Profile"
+                      className="w-8 h-8 rounded-full border"
+                    />
+                    <span className="text-sm font-medium text-gray-800">
+                      {user.displayName || "User"}
+                    </span>
+                  </div>
+                  <Link
+                    to="/profile"
+                    className="block text-sm text-gray-700 hover:text-blue-500"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="block text-sm text-left text-gray-700 hover:text-red-500"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              )}
+              {!loading && !user && (
+                <>
+                  <Link
+                    to="/sign-in"
+                    className="block text-gray-700 hover:text-blue-500"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/sign-up"
+                    className="block text-blue-500 font-semibold"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}

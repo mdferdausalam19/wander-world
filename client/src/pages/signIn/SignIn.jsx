@@ -1,20 +1,40 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import SocialSignIn from "../../components/auth/SocialSignIn";
+import useAuth from "../../hooks/useAuth";
+import { TbFidgetSpinner } from "react-icons/tb";
+import toast from "react-hot-toast";
 
 export default function SignIn() {
   const [showPass, setShowPass] = useState(false);
+  const { signInUser, loading, setLoading } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const handleSignIn = async (data) => {
     const { email, password } = data;
-    console.log(email, password);
+    try {
+      await signInUser(email, password);
+      navigate("/");
+      toast.success("Sign in successful!");
+      reset();
+    } catch (err) {
+      setLoading(false);
+      if (err.code == "auth/invalid-credential") {
+        return toast.error(
+          "Invalid credentials. Please check your email and password."
+        );
+      } else {
+        toast.error(err.message);
+      }
+    }
   };
 
   return (
@@ -93,9 +113,14 @@ export default function SignIn() {
             <div>
               <button
                 type="submit"
+                disabled={loading}
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
-                Sign in
+                {loading ? (
+                  <TbFidgetSpinner className="animate-spin text-xl" />
+                ) : (
+                  "Sign in"
+                )}
               </button>
             </div>
           </form>
