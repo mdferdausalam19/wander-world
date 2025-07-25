@@ -53,18 +53,18 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-emerald-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-emerald-900">
           Join WanderWorld
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-emerald-600">
           Create your account to get started
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow-lg rounded-lg sm:px-10 border border-gray-200">
+        <div className="bg-white py-8 px-6 shadow-lg rounded-lg sm:px-10 border border-emerald-100">
           <form onSubmit={handleSubmit(handleSingUp)} className="space-y-6">
             <div>
               <label
@@ -81,10 +81,10 @@ export default function SignUp() {
                   type="text"
                   autoComplete="name"
                   placeholder="Enter your full name"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors duration-200"
+                  className="appearance-none block w-full px-3 py-2 border border-emerald-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors duration-200"
                 />
                 {errors.fullName && (
-                  <p className="mt-2 text-sm text-red-600">
+                  <p className="mt-2 text-sm text-emerald-600">
                     {errors.fullName.message}
                   </p>
                 )}
@@ -110,10 +110,10 @@ export default function SignUp() {
                   type="email"
                   autoComplete="email"
                   placeholder="Enter your email"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors duration-200"
+                  className="appearance-none block w-full px-3 py-2 border border-emerald-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors duration-200"
                 />
                 {errors.email && (
-                  <p className="mt-2 text-sm text-red-600">
+                  <p className="mt-2 text-sm text-emerald-600">
                     {errors.email.message}
                   </p>
                 )}
@@ -133,7 +133,7 @@ export default function SignUp() {
                   {...register("image")}
                   type="url"
                   placeholder="Enter your photo URL"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors duration-200"
+                  className="appearance-none block w-full px-3 py-2 border border-emerald-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors duration-200"
                 />
               </div>
             </div>
@@ -153,12 +153,12 @@ export default function SignUp() {
                   type={showPass ? "text" : "password"}
                   autoComplete="new-password"
                   placeholder="Create a strong password"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors duration-200"
+                  className="appearance-none block w-full px-3 py-2 border border-emerald-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors duration-200"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-emerald-600"
                 >
                   {showPass ? (
                     <FaEyeSlash className="h-5 w-5" />
@@ -167,7 +167,7 @@ export default function SignUp() {
                   )}
                 </button>
                 {errors.password && (
-                  <p className="mt-2 text-sm text-red-600">
+                  <p className="mt-2 text-sm text-emerald-600">
                     {errors.password.message}
                   </p>
                 )}
@@ -182,7 +182,7 @@ export default function SignUp() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
                 {loading ? (
                   <TbFidgetSpinner className="animate-spin text-xl" />
@@ -211,11 +211,11 @@ export default function SignUp() {
           </div>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm">
               Already have an account?{" "}
               <Link
                 to={"/sign-in"}
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-emerald-600 hover:underline"
               >
                 Sign in
               </Link>

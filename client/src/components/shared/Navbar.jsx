@@ -19,20 +19,28 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 backdrop-blur-md">
+    <nav className="bg-white border-b border-emerald-200 sticky top-0 z-50 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center justify-between w-full md:w-auto">
-            <Link to="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold text-gray-900">
-                WanderWorld
-              </span>
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                <span className="text-xl">🌍</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-2xl font-black text-gray-900 tracking-tight">
+                  Wander<span className="text-emerald-600">World</span>
+                </span>
+                <span className="text-xs text-emerald-600 font-medium -mt-1">
+                  Discover the World
+                </span>
+              </div>
             </Link>
 
             <div className="md:hidden">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="ml-4 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                className="ml-4 inline-flex items-center justify-center p-2 rounded-md text-emerald-400 hover:text-emerald-500 hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500"
               >
                 <svg
                   className="h-6 w-6"
@@ -61,10 +69,10 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center">
             <Link
               to="/"
-              className="text-gray-700 hover:text-blue-500 font-medium"
+              className="text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl hover:bg-emerald-50"
             >
               Home
             </Link>
@@ -72,10 +80,10 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center space-x-4">
             {loading ? (
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
             ) : user ? (
               <div className="relative group">
-                <button className="flex items-center space-x-2 text-gray-700 hover:text-blue-500 focus:outline-none rounded-full">
+                <button className="flex items-center space-x-2 text-emerald-700 hover:text-emerald-600 focus:outline-none rounded-full">
                   <img
                     src={
                       user.photoURL ||
@@ -90,14 +98,14 @@ export default function Navbar() {
                 </button>
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <Link
-                    to="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    to="/user-profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
                   >
                     Profile
                   </Link>
                   <button
                     onClick={handleSignOut}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
                   >
                     Sign Out
                   </button>
@@ -107,13 +115,13 @@ export default function Navbar() {
               <>
                 <Link
                   to="/sign-in"
-                  className="text-gray-700 hover:text-blue-500 px-4 py-2 text-sm font-medium"
+                  className="text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl hover:bg-emerald-50"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/sign-up"
-                  className="bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded-full text-sm font-medium"
+                  className="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-xl text-sm font-medium"
                 >
                   Sign Up
                 </Link>
@@ -123,55 +131,65 @@ export default function Navbar() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="absolute left-0 right-0 mt-2 bg-white border-t border-gray-200 shadow-md z-40 px-4 py-4 md:hidden">
-            <div className="space-y-3">
-              <Link to="/" className="block text-gray-700 hover:text-blue-500">
-                Home
-              </Link>
-              {!loading && user && (
-                <>
-                  <div className="flex items-center space-x-3 pt-4 border-t border-gray-200">
-                    <img
-                      src={user.photoURL || "https://via.placeholder.com/32"}
-                      alt="Profile"
-                      className="w-8 h-8 rounded-full border"
-                    />
-                    <span className="text-sm font-medium text-gray-800">
-                      {user.displayName || "User"}
-                    </span>
-                  </div>
-                  <Link
-                    to="/profile"
-                    className="block text-sm text-gray-700 hover:text-blue-500"
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={handleSignOut}
-                    className="block text-sm text-left text-gray-700 hover:text-red-500"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              )}
-              {!loading && !user && (
-                <>
-                  <Link
-                    to="/sign-in"
-                    className="block text-gray-700 hover:text-blue-500"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/sign-up"
-                    className="block text-blue-500 font-semibold"
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )}
+          <>
+            <div className="absolute left-0 right-0 mt-2 bg-white border-t border-gray-200 shadow-md z-40 px-4 py-4 md:hidden">
+              <div className="space-y-3">
+                <Link
+                  to="/"
+                  className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl"
+                >
+                  Home
+                </Link>
+                {!loading && user && (
+                  <>
+                    <div className="flex items-center space-x-3 pt-4 border-t border-gray-200 px-4">
+                      <img
+                        src={
+                          user.photoURL ||
+                          "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg"
+                        }
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full border"
+                      />
+                      <span className="text-sm font-medium text-gray-800">
+                        {user.displayName || "User"}
+                      </span>
+                    </div>
+
+                    <Link
+                      to="/user-profile"
+                      className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl"
+                    >
+                      Profile
+                    </Link>
+
+                    <button
+                      onClick={handleSignOut}
+                      className="block text-emerald-700 hover:text-red-500 px-4 py-2 text-sm font-medium rounded-xl"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                )}
+                {!loading && !user && (
+                  <>
+                    <Link
+                      to="/sign-in"
+                      className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      to="/sign-up"
+                      className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl"
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </nav>
