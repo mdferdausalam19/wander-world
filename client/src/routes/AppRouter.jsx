@@ -5,6 +5,7 @@ import Home from "../pages/home/Home";
 import SignIn from "../pages/signIn/SignIn";
 import SignUp from "../pages/signUp/SignUp";
 import UserProfile from "../pages/userProfile/UserProfile";
+import AddTouristSpot from "../pages/touristSpot/AddTouristSpot";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ export const router = createBrowserRouter([
       {
         path: "/user-profile",
         element: <UserProfile />,
+      },
+      {
+        path: "/add-tourist-spot",
+        element: <AddTouristSpot />,
       },
     ],
   },

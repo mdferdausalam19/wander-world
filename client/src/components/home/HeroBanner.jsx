@@ -3,7 +3,7 @@ import bannerImage from "../../assets/banner-image.jpg";
 
 export default function HeroBanner() {
   return (
-    <div className="relative h-[calc(100vh-4rem)] w-full overflow-hidden flex items-center justify-center pt-24 pb-12 md:pt-0 md:pb-0">
+    <div className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-24 pb-12 md:pt-0 md:pb-0">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
