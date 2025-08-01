@@ -76,6 +76,14 @@ export default function Navbar() {
             >
               Home
             </Link>
+            {user && (
+              <Link
+                to="/all-tourist-spots"
+                className="text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl hover:bg-emerald-50"
+              >
+                All Tourist Spots
+              </Link>
+            )}
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
@@ -147,6 +155,14 @@ export default function Navbar() {
                 >
                   Home
                 </Link>
+                {user && (
+                  <Link
+                    to="/all-tourist-spots"
+                    className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl"
+                  >
+                    All Tourist Spots
+                  </Link>
+                )}
                 {!loading && user && (
                   <>
                     <div className="flex items-center space-x-3 pt-4 border-t border-gray-200 px-4">
