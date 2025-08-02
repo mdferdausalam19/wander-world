@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaHeart, FaRegHeart, FaMapMarkerAlt } from "react-icons/fa";
+import { Link } from "react-router";
 
 function formatCurrency(amount) {
   return amount ? `$${amount.toLocaleString()}` : "N/A";
@@ -71,9 +72,12 @@ export default function TouristSpotCard({ spot, onLike, liked }) {
             {spot.seasonality}
           </span>
         </div>
-        <button className="mt-4 w-full bg-emerald-500 text-white rounded-xl py-2 font-semibold shadow hover:bg-emerald-600 transition-colors text-sm">
+        <Link
+          to={`/tourist-spot/${spot.id}`}
+          className="mt-4 w-full bg-emerald-500 text-white rounded-xl py-2 font-semibold shadow hover:bg-emerald-600 transition-colors text-sm cursor-pointer hover:shadow-md text-center"
+        >
           View Details
-        </button>
+        </Link>
       </div>
     </div>
   );
