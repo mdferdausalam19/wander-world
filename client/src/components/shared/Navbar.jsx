@@ -106,6 +106,12 @@ export default function Navbar() {
                 </button>
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <Link
+                    to="/my-list"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
+                  >
+                    My Travel List
+                  </Link>
+                  <Link
                     to="/add-tourist-spot"
                     className="block px-4 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
                   >
@@ -178,7 +184,12 @@ export default function Navbar() {
                         {user.displayName || "User"}
                       </span>
                     </div>
-
+                    <Link
+                      to="/my-list"
+                      className="block px-4 mt-4 text-sm text-gray-700 hover:text-emerald-600 font-medium"
+                    >
+                      My Travel List
+                    </Link>
                     <Link
                       to="/add-tourist-spot"
                       className="block px-4 mt-4 text-sm text-gray-700 hover:text-emerald-600 font-medium"
