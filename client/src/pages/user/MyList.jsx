@@ -3,12 +3,18 @@ import { Link } from "react-router";
 import { FaPlus } from "react-icons/fa";
 import UserStats from "../../components/user/UserStats";
 import MyListTable from "../../components/user/MyListTable";
+import DeleteDestinationModal from "../../components/user/DeleteDestinationModal";
+import EditDestinationModal from "../../components/user/EditDestinationModal";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { sampleDestinations } from "../../data/sampleDestinations";
+import toast from "react-hot-toast";
 
 export default function MyList() {
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState(null);
 
   // Simulate loading data
   useEffect(() => {
@@ -19,6 +25,38 @@ export default function MyList() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleEdit = (destination) => {
+    setSelectedDestination(destination);
+    setShowEditModal(true);
+  };
+
+  const handleDeleteClick = (id) => {
+    const destination = destinations.find((dest) => dest.id === id);
+    setSelectedDestination(destination);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedDestination) {
+      setDestinations(
+        destinations.filter((dest) => dest.id !== selectedDestination.id)
+      );
+      setShowDeleteModal(false);
+    }
+  };
+
+  const handleSaveEdit = (updatedDestination) => {
+    setDestinations(
+      destinations.map((dest) =>
+        dest.id === updatedDestination.id
+          ? { ...dest, ...updatedDestination }
+          : dest
+      )
+    );
+    setShowEditModal(false);
+    toast.success("Destination deleted successfully!");
+  };
 
   // Calculate user stats
   const totalDestinations = destinations.length;
@@ -61,7 +99,14 @@ export default function MyList() {
 
         {/* Destinations Table */}
         <div className="bg-white rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
-          <MyListTable destinations={destinations} />
+          <MyListTable
+            destinations={destinations}
+            onDelete={handleDeleteClick}
+            onEdit={(id) => {
+              const destination = destinations.find((dest) => dest.id === id);
+              handleEdit(destination);
+            }}
+          />
 
           {destinations.length === 0 && (
             <div className="p-8 text-center">
@@ -98,6 +143,22 @@ export default function MyList() {
           )}
         </div>
       </div>
+
+      {/* Edit Modal */}
+      <EditDestinationModal
+        open={showEditModal}
+        destination={selectedDestination}
+        onSave={handleSaveEdit}
+        onCancel={() => setShowEditModal(false)}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteDestinationModal
+        open={showDeleteModal}
+        destination={selectedDestination}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setShowDeleteModal(false)}
+      />
     </div>
   );
 }

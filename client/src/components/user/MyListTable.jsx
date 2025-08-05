@@ -1,7 +1,7 @@
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router";
 
-export default function MyListTable({ destinations = [] }) {
+export default function MyListTable({ destinations = [], onDelete, onEdit }) {
   const navigate = useNavigate();
 
   return (
@@ -121,12 +121,14 @@ export default function MyListTable({ destinations = [] }) {
                         <FaEye className="h-4 w-4" />
                       </button>
                       <button
+                        onClick={() => onEdit(destination.id)}
                         className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-50"
                         title="Edit"
                       >
                         <FaEdit className="h-4 w-4" />
                       </button>
                       <button
+                        onClick={() => onDelete(destination.id)}
                         className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-50"
                         title="Delete"
                       >
