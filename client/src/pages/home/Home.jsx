@@ -4,7 +4,7 @@ import QuickStats from "../../components/home/QuickStats";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-emerald-50">
+    <div>
       <HeroBanner />
       <PopularDestinations />
       <QuickStats />

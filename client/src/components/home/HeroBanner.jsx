@@ -1,9 +1,8 @@
-import SearchBar from "./SearchBar";
 import bannerImage from "../../assets/banner-image.jpg";
 
 export default function HeroBanner() {
   return (
-    <div className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-24 pb-12 md:pt-0 md:pb-0">
+    <div className="relative h-screen w-full flex items-center justify-center pt-24 pb-12 md:pt-0 md:pb-0">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -16,7 +15,7 @@ export default function HeroBanner() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center w-full px-2 sm:px-6 lg:px-8 text-center overflow-visible">
-        <div className="mb-4 flex items-center justify-center">
+        <div className="mb-8 flex items-center justify-center">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight drop-shadow-2xl">
             Wander<span className="text-emerald-400">World</span>
           </h1>
@@ -32,11 +31,6 @@ export default function HeroBanner() {
             global community of travelers and discover hidden gems, share your
             adventures, and plan your next unforgettable journey.
           </p>
-        </div>
-
-        {/* SearchBar */}
-        <div className="mt-6 mb-12">
-          <SearchBar />
         </div>
 
         {/* Call to Action */}

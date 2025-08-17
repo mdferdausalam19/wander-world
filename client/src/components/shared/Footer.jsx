@@ -13,7 +13,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-emerald-800 text-white mt-16">
+    <footer className="bg-emerald-600 text-white mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
@@ -172,7 +172,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-emerald-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-emerald-200/50 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-emerald-100 text-sm">
             &copy; {currentYear} WanderWorld. All rights reserved.
           </p>

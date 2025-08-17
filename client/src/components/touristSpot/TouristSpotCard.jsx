@@ -26,7 +26,7 @@ export default function TouristSpotCard({ spot, onLike, liked }) {
   };
 
   return (
-    <div className="group bg-white rounded-2xl shadow hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
+    <div className="group bg-white rounded-xl shadow hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
       <div className="relative w-full aspect-video overflow-hidden">
         <img
           src={spot.images[0]}
