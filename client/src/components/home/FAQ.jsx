@@ -35,18 +35,18 @@ export default function FAQ() {
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-3">
-            Frequently Asked Questions
+            Frequently Asked <span className="text-emerald-600">Questions</span>
           </h2>
           <p className="text-gray-700">
             Find answers to common questions about our travel services
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-2">
           {faqData.map((faq, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl border border-emerald-100 overflow-hidden transition-all duration-200 hover:shadow-md"
+              className="bg-white rounded-xl border border-emerald-200 overflow-hidden transition-all duration-200 hover:shadow-md"
             >
               <button
                 className={`w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none hover:bg-emerald-50  transition-colors `}
