@@ -41,7 +41,7 @@ export default function PopularDestinations({ spots = sampleDestinations }) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {spots.slice(0, 12).map((spot) => (
           <TouristSpotCard
             key={spot.id}
