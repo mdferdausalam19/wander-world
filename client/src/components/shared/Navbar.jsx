@@ -73,7 +73,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center">
             <Link
               to="/"
-              className="text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl hover:bg-emerald-50 transition-colors"
+              className="text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-lg hover:bg-emerald-200 transition-colors duration-100"
             >
               Home
             </Link>
@@ -81,7 +81,7 @@ export default function Navbar() {
               <>
                 <Link
                   to="/all-tourist-spots"
-                  className="text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl hover:bg-emerald-50 transition-colors"
+                  className="text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-lg hover:bg-emerald-200 transition-colors duration-100"
                 >
                   All Tourist Spots
                 </Link>
@@ -107,33 +107,33 @@ export default function Navbar() {
                     {user.displayName || "User"}
                   </span>
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="absolute right-0 mt-2 w-48 bg-emerald-100 rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <div className="py-1">
                     <Link
                       to="/my-list"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
                     >
                       <FaListAlt className="mr-2 text-emerald-600" />
                       My Travel List
                     </Link>
                     <Link
                       to="/add-tourist-spot"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
                     >
                       <FaPlus className="mr-2 text-emerald-600" />
                       Add Destination
                     </Link>
-                    <div className="border-t border-gray-100 my-1"></div>
+                    <div className="border-t border-emerald-100 my-1"></div>
                     <Link
                       to="/user-profile"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
                     >
                       <FaUser className="mr-2 text-emerald-600" />
                       Your Profile
                     </Link>
                     <button
                       onClick={handleSignOut}
-                      className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
                     >
                       <FaSignOutAlt className="mr-2 text-emerald-600" />
                       Sign out
@@ -162,18 +162,18 @@ export default function Navbar() {
 
         {mobileMenuOpen && (
           <>
-            <div className="absolute left-0 right-0 mt-2 bg-white border-t border-gray-200 shadow-md z-40 px-4 py-4 md:hidden">
+            <div className="absolute left-0 right-0 bg-emerald-100 border-t border-gray-200 shadow-md z-40 px-4 py-4 md:hidden">
               <div className="space-y-3">
                 <Link
                   to="/"
-                  className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl"
+                  className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl hover:bg-emerald-200 transition-colors duration-100"
                 >
                   Home
                 </Link>
                 {user && (
                   <Link
                     to="/all-tourist-spots"
-                    className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl"
+                    className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl hover:bg-emerald-200 transition-colors duration-100"
                   >
                     All Tourist Spots
                   </Link>
@@ -195,29 +195,29 @@ export default function Navbar() {
                     </div>
                     <Link
                       to="/my-list"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
                     >
                       <FaListAlt className="mr-2 text-emerald-600" />
                       My Travel List
                     </Link>
                     <Link
                       to="/add-tourist-spot"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
                     >
                       <FaPlus className="mr-2 text-emerald-600" />
                       Add Destination
                     </Link>
-                    <div className="border-t border-gray-100 my-1"></div>
+                    <div className="border-t border-emerald-100 my-1"></div>
                     <Link
                       to="/user-profile"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
                     >
                       <FaUser className="mr-2 text-emerald-600" />
                       Your Profile
                     </Link>
                     <button
                       onClick={handleSignOut}
-                      className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
                     >
                       <FaSignOutAlt className="mr-2 text-emerald-600" />
                       Sign out
@@ -228,13 +228,13 @@ export default function Navbar() {
                   <>
                     <Link
                       to="/sign-in"
-                      className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl"
+                      className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl hover:bg-emerald-200 transition-colors duration-100"
                     >
                       Sign In
                     </Link>
                     <Link
                       to="/sign-up"
-                      className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl"
+                      className="block text-gray-700 hover:text-emerald-600 px-4 py-2 text-sm font-medium rounded-xl hover:bg-emerald-200 transition-colors duration-100"
                     >
                       Sign Up
                     </Link>

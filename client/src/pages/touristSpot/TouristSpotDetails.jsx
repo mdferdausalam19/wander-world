@@ -79,7 +79,7 @@ export default function TouristSpotDetails() {
 
   if (!spot) {
     return (
-      <div className="min-h-screen bg-emerald-50 flex items-center justify-center">
+      <div className="min-h-screen bg-emerald-100 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-medium text-gray-700 mb-4">
             Destination not found

@@ -3,10 +3,10 @@ import { useNavigate } from "react-router";
 export default function ErrorPage() {
   const navigate = useNavigate();
   return (
-    <section className="bg-white ">
+    <section className="bg-emerald-100 ">
       <div className="container flex items-center min-h-screen px-6 py-12 mx-auto">
         <div className="flex flex-col items-center max-w-sm mx-auto text-center">
-          <p className="p-3 text-sm font-medium rounded-full bg-blue-50 ">
+          <p className="p-3 text-sm font-medium rounded-full bg-emerald-50 ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -30,7 +30,7 @@ export default function ErrorPage() {
           <div className="flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center justify-center w-1/2 px-5 py-1 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto hover:bg-gray-100 "
+              className="flex items-center justify-center w-1/2 px-5 py-1 text-sm text-gray-700 transition-colors duration-200 bg-emerald-100 border rounded-lg gap-x-2 sm:w-auto hover:bg-emerald-200 "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

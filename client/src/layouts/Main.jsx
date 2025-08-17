@@ -4,7 +4,7 @@ import Footer from "../components/shared/Footer";
 
 export default function Main() {
   return (
-    <div>
+    <div className="bg-emerald-100">
       <Navbar />
       <Outlet />
       <Footer />

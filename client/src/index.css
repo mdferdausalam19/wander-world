@@ -7,13 +7,4 @@
 /* Custom CSS */
 body {
   font-family: "Poppins", sans-serif;
-  /* Subtle emerald-themed gradient background for the whole app */
-  min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    rgba(236, 253, 245, 1) 0%,
-    rgba(209, 250, 229, 1) 35%,
-    rgba(240, 253, 244, 1) 100%
-  );
-  background-attachment: fixed;
 }

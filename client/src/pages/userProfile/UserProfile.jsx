@@ -32,7 +32,7 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-emerald-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-emerald-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center border border-emerald-100 max-w-xl mx-auto">
         <img
           src={user?.photoURL || "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg"}

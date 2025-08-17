@@ -8,7 +8,7 @@ export default function AddTouristSpot() {
   };
 
   return (
-    <div className="min-h-screen bg-emerald-50 flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-emerald-100 flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-2xl flex flex-col items-center mb-8">
         <h1 className="text-4xl font-extrabold text-emerald-700 mb-3 text-center drop-shadow-sm">
           Add a Tourist Spot

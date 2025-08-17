@@ -31,7 +31,7 @@ export default function AllTouristSpots() {
     });
 
   return (
-    <div className="min-h-screen bg-emerald-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-emerald-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-emerald-700 mb-2">
@@ -42,13 +42,13 @@ export default function AllTouristSpots() {
             WanderWorld community.
           </p>
         </div>
-        <div className="flex flex-wrap gap-4 mb-8 justify-center">
+        <div className="flex flex-wrap gap-4 mb-8 justify-center border border-emerald-600 p-5 rounded-lg bg-emerald-50/50 backdrop-blur-sm">
           <input
             type="text"
             placeholder="Search by name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border border-emerald-500 rounded-lg px-3 py-2 focus:outline-emerald-500 focus:ring-emerald-500 focus:border-emerald-500"
+            className="border border-emerald-500 rounded-lg px-3 py-2 focus:outline-emerald-500 focus:ring-emerald-500 focus:border-emerald-500 flex-1"
           />
           <select
             value={continent}
@@ -73,8 +73,11 @@ export default function AllTouristSpots() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {sortedSpots.length === 0 ? (
-            <div className="col-span-full text-center text-gray-400">
-              No destinations found.
+            <div className="col-span-full text-center text-gray-400 border border-emerald-600 p-10 rounded-lg bg-emerald-50/50 ">
+              <h2 className="text-2xl font-bold text-emerald-700 mb-2">
+                No destinations found.
+              </h2>
+              <p className="text-gray-500">Try different filters or search.</p>
             </div>
           ) : (
             sortedSpots.map((spot) => (
