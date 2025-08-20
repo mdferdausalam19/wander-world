@@ -10,6 +10,7 @@ import PrivateRoute from "./PrivateRoute";
 import AllTouristSpots from "../pages/touristSpot/AllTouristSpots";
 import TouristSpotDetails from "../pages/touristSpot/TouristSpotDetails";
 import MyList from "../pages/user/MyList";
+import AdminDashboard from "../pages/admin/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +59,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyList />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/admin/dashboard",
+        element: (
+          <PrivateRoute>
+            <AdminDashboard />
           </PrivateRoute>
         ),
       },
