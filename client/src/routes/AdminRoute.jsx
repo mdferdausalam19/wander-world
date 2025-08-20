@@ -1,4 +1,4 @@
-import LoadingSpinner from "../components/Shared/LoadingSpinner";
+import LoadingSpinner from "../components/shared/LoadingSpinner";
 import { Navigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 
