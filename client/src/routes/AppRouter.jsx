@@ -11,7 +11,7 @@ import AllTouristSpots from "../pages/touristSpot/AllTouristSpots";
 import TouristSpotDetails from "../pages/touristSpot/TouristSpotDetails";
 import MyList from "../pages/user/MyList";
 import AdminDashboard from "../pages/admin/Dashboard";
-
+import AdminRoute from "./AdminRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -66,7 +66,9 @@ export const router = createBrowserRouter([
         path: "/admin/dashboard",
         element: (
           <PrivateRoute>
-            <AdminDashboard />
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
