@@ -1,10 +1,10 @@
 import { FiEdit2, FiTrash2, FiEye } from "react-icons/fi";
 
-export default function PostDataTable({ data }) {
+export default function DestinationDataTable({ data }) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-6 border-b border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-900">Posts</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Destinations</h3>
       </div>
 
       <div className="overflow-x-auto">
@@ -48,7 +48,7 @@ export default function PostDataTable({ data }) {
                   {item.location?.city}, {item.location?.country}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                  {item.host?.name}
+                  {item.author?.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                   {item.likes}

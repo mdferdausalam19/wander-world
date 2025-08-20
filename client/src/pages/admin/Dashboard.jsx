@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { FiUsers, FiHome, FiUser } from "react-icons/fi";
 import StatsCard from "../../components/admin/StatsCard";
-import PostDataTable from "../../components/admin/PostDataTable";
+import DestinationDataTable from "../../components/admin/DestinationDataTable";
 import { FaHeart } from "react-icons/fa";
+import { sampleDestinations } from "../../data/sampleDestinations";
+
+const destinationsData = [...sampleDestinations].slice(0, 5);
 
 const statsData = [
   {
     id: 1,
-    title: "Total Posts",
+    title: "Total Destinations",
     value: "1,234",
     icon: <FiHome size={24} />,
     color: "blue",
@@ -35,34 +38,8 @@ const statsData = [
   },
 ];
 
-const postsData = [
-  {
-    id: 1,
-    name: "Santorini",
-    location: {
-      city: "Fira",
-      country: "Greece",
-      coordinates: { lat: 36.3932, lng: 25.4615 },
-    },
-    continent: "Europe",
-    averageCost: 1200,
-    seasonality: "Summer",
-    travelTime: { days: 5, hours: 0 },
-    visitorsPerYear: 2000000,
-    description:
-      "A stunning island with whitewashed buildings and iconic sunsets.",
-    images: [
-      "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
-    ],
-    host: { name: "John Doe", userId: "123" },
-    likes: 5,
-    createdAt: "2025-07-10T00:00:00Z",
-    updatedAt: "2025-07-15T00:00:00Z",
-  },
-];
-
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState("posts");
+  const [activeTab, setActiveTab] = useState("destinations");
 
   return (
     <div className="min-h-screen p-6">
@@ -91,7 +68,7 @@ export default function AdminDashboard() {
         <div className="mb-6 border-b border-gray-200">
           <nav className="-mb-px flex space-x-8">
             {[
-              { id: "posts", name: "All Posts" },
+              { id: "destinations", name: "All Destinations" },
               { id: "users", name: "Users" },
               { id: "hosts", name: "Hosts" },
             ].map((tab) => (
@@ -112,7 +89,9 @@ export default function AdminDashboard() {
 
         {/* Tab Content */}
         <div className="space-y-8">
-          {activeTab === "posts" && <PostDataTable data={postsData} />}
+          {activeTab === "destinations" && (
+            <DestinationDataTable data={destinationsData} />
+          )}
         </div>
       </div>
     </div>
