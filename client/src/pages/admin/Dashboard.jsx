@@ -4,6 +4,7 @@ import StatsCard from "../../components/admin/StatsCard";
 import DestinationDataTable from "../../components/admin/DestinationDataTable";
 import { FaHeart } from "react-icons/fa";
 import { sampleDestinations } from "../../data/sampleDestinations";
+import UserDataTable from "../../components/admin/UserDataTable";
 
 const destinationsData = [...sampleDestinations].slice(0, 5);
 
@@ -38,12 +39,31 @@ const statsData = [
   },
 ];
 
+const usersData = [
+  {
+    id: 1,
+    profileImage: "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
+    name: "John Doe",
+    email: "john.doe@example.com",
+    role: "user",
+    status: "active",
+  },
+  {
+    id: 2,
+    profileImage: "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
+    name: "Jane Smith",
+    email: "jane.smith@example.com",
+    role: "user",
+    status: "active",
+  },
+];
+
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("destinations");
 
   return (
     <div className="min-h-screen p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
           <p className="text-gray-600">
@@ -92,6 +112,7 @@ export default function AdminDashboard() {
           {activeTab === "destinations" && (
             <DestinationDataTable data={destinationsData} />
           )}
+          {activeTab === "users" && <UserDataTable data={usersData} />}
         </div>
       </div>
     </div>
