@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { FaHeart, FaRegHeart, FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { Link } from "react-router";
 
 function formatCurrency(amount) {
@@ -7,8 +6,8 @@ function formatCurrency(amount) {
 }
 
 function formatVisitors(num) {
-  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + "M";
-  if (num >= 1_000) return (num / 1_000).toFixed(1) + "K";
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+  if (num >= 1000) return (num / 1000).toFixed(1) + "K";
   return num;
 }
 
@@ -18,32 +17,15 @@ const seasonColors = {
   "Year-round": "bg-emerald-100 text-emerald-700",
 };
 
-export default function TouristSpotCard({ spot, onLike, liked }) {
-  const [isLiked, setIsLiked] = useState(liked);
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    onLike && onLike(spot.id, !isLiked);
-  };
-
+export default function TouristSpotCard({ spot }) {
   return (
     <div className="group bg-white rounded-xl shadow hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
-      <div className="relative w-full aspect-video overflow-hidden">
+      <div className="w-full aspect-video overflow-hidden">
         <img
           src={spot.images[0]}
           alt={spot.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        <button
-          onClick={handleLike}
-          className="absolute top-3 right-3 bg-white/80 rounded-full p-2 shadow hover:bg-emerald-50 text-emerald-500 hover:text-emerald-600 transition"
-          aria-label={isLiked ? "Unlike" : "Like"}
-        >
-          {isLiked ? (
-            <FaHeart className="h-5 w-5" />
-          ) : (
-            <FaRegHeart className="h-5 w-5" />
-          )}
-        </button>
       </div>
       <div className="flex-1 flex flex-col p-4 gap-2">
         <div className="flex items-center gap-2 mb-1">

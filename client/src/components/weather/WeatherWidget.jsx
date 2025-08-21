@@ -27,7 +27,7 @@ const getWeatherIcon = (condition) => {
   return <WiDaySunny className="text-yellow-400 text-4xl" />;
 };
 
-export default function WeatherWidget({ location = "", onRefresh }) {
+export default function WeatherWidget({ location = "" }) {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -75,24 +75,10 @@ export default function WeatherWidget({ location = "", onRefresh }) {
     return () => clearInterval(interval);
   }, [location]);
 
-  const handleRefresh = () => {
-    if (onRefresh) {
-      onRefresh();
-    } else {
-      fetchWeather();
-    }
-  };
-
   if (loading && !weather) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-emerald-100 p-4">
-        <div className="animate-pulse flex items-center justify-between">
-          <div className="space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-24"></div>
-            <div className="h-6 bg-gray-200 rounded w-16"></div>
-          </div>
-          <div className="h-10 w-10 bg-gray-200 rounded-full"></div>
-        </div>
+      <div className=" h-96 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-500 border-t-2"></div>
       </div>
     );
   }
@@ -101,16 +87,7 @@ export default function WeatherWidget({ location = "", onRefresh }) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-red-100 p-4">
         <div className="text-red-500 text-sm flex items-center justify-between">
-          <span>{error}</span>
-          <button
-            onClick={handleRefresh}
-            className="text-emerald-600 hover:text-emerald-800 p-1 rounded-full hover:bg-emerald-50 transition-colors"
-            title="Retry"
-          >
-            <FiRefreshCw
-              className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
-            />
-          </button>
+          <span>Failed to load weather data</span>
         </div>
       </div>
     );
@@ -126,16 +103,6 @@ export default function WeatherWidget({ location = "", onRefresh }) {
             </h3>
             <p className="text-xs text-gray-400">Last updated: {lastUpdated}</p>
           </div>
-          <button
-            onClick={handleRefresh}
-            className="text-gray-400 hover:text-emerald-600 p-1 rounded-full hover:bg-gray-50 transition-colors"
-            disabled={loading}
-            title="Refresh"
-          >
-            <FiRefreshCw
-              className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
-            />
-          </button>
         </div>
 
         <div className="mt-4 flex items-center justify-between">

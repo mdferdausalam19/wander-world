@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { FaMapMarkerAlt, FaArrowLeft } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaArrowLeft,
+  FaHeart,
+  FaRegHeart,
+} from "react-icons/fa";
+import { toast } from "react-hot-toast";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { sampleDestinations } from "../../data/sampleDestinations";
 import WeatherWidget from "../../components/weather/WeatherWidget";
@@ -30,6 +36,28 @@ export default function TouristSpotDetails() {
   const navigate = useNavigate();
   const [spot, setSpot] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+
+  // Handle like functionality
+  const handleLike = async () => {
+    try {
+      // Optimistic UI update
+      const newLikeStatus = !isLiked;
+      setIsLiked(newLikeStatus);
+      setLikeCount((prev) => (newLikeStatus ? prev + 1 : prev - 1));
+
+      // TODO: Replace with actual API call when backend is ready
+
+      toast.success(newLikeStatus ? "Liked this spot!" : "Liked removed!");
+    } catch (error) {
+      // Revert on error
+      setIsLiked(!isLiked);
+      setLikeCount((prev) => (isLiked ? prev + 1 : prev - 1));
+      toast.error("Failed to update like status");
+      console.error("Error updating like:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchSpot = async () => {
@@ -58,9 +86,13 @@ export default function TouristSpotDetails() {
           visitorsPerYear: foundSpot.visitorsPerYear,
           travelTime: foundSpot.travelTime,
           description: foundSpot.description || "No description available.",
+          likes: foundSpot.likes || 0,
+          isLiked: false, // This would come from the server based on user auth
         };
 
         setSpot(spotData);
+        setLikeCount(spotData.likes);
+        setIsLiked(spotData.isLiked);
       } catch (error) {
         console.error("Error fetching destination:", error);
       } finally {
@@ -150,7 +182,7 @@ export default function TouristSpotDetails() {
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-6">
               {/* Info Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-white rounded-xl shadow-sm p-4 border border-emerald-100">
                   <p className="text-sm text-gray-500">Average Cost</p>
                   <p className="font-medium">
@@ -172,6 +204,13 @@ export default function TouristSpotDetails() {
                     {spot.visitorsPerYear
                       ? spot.visitorsPerYear.toLocaleString()
                       : "N/A"}
+                  </p>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm p-4 border border-emerald-100 flex flex-col">
+                  <p className="text-sm text-gray-500">Total Likes</p>
+                  <p className="flex items-center mt-1">
+                    <FaHeart className="text-xl text-emerald-500 mr-2" />
+                    <span className="font-medium">{likeCount}</span>
                   </p>
                 </div>
               </div>
@@ -209,6 +248,20 @@ export default function TouristSpotDetails() {
                     </div>
                   </div>
                 )}
+                <div className="flex items-center justify-start mt-6 border-t border-gray-100 pt-6">
+                  <button
+                    onClick={handleLike}
+                    className="flex items-center px-4 py-2 border border-emerald-500 
+                    bg-emerald-100 text-emerald-900 rounded-lg hover:bg-emerald-50 hover:text-emerald-600 transition-colors cursor-pointer "
+                  >
+                    {isLiked ? (
+                      <FaHeart className="mr-2 text-emerald-900" />
+                    ) : (
+                      <FaHeart className="mr-2 text-emerald-400" />
+                    )}
+                    <span>{isLiked ? "Liked" : "Like"}</span>
+                  </button>
+                </div>
               </div>
             </div>
             {/* Right Column */}
