@@ -5,8 +5,9 @@ import DestinationDataTable from "../../components/admin/DestinationDataTable";
 import { FaHeart } from "react-icons/fa";
 import { sampleDestinations } from "../../data/sampleDestinations";
 import UserDataTable from "../../components/admin/UserDataTable";
+import HostDataTable from "../../components/admin/HostDataTable";
 
-const destinationsData = [...sampleDestinations].slice(0, 5);
+const destinationsData = [...sampleDestinations].slice(0, 2);
 
 const statsData = [
   {
@@ -54,6 +55,25 @@ const usersData = [
     name: "Jane Smith",
     email: "jane.smith@example.com",
     role: "user",
+    status: "active",
+  },
+];
+
+const hostsData = [
+  {
+    id: 1,
+    profileImage: "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
+    name: "John Doe",
+    email: "john.doe@example.com",
+    role: "host",
+    status: "active",
+  },
+  {
+    id: 2,
+    profileImage: "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
+    name: "Jane Smith",
+    email: "jane.smith@example.com",
+    role: "host",
     status: "active",
   },
 ];
@@ -113,6 +133,7 @@ export default function AdminDashboard() {
             <DestinationDataTable data={destinationsData} />
           )}
           {activeTab === "users" && <UserDataTable data={usersData} />}
+          {activeTab === "hosts" && <HostDataTable data={hostsData} />}
         </div>
       </div>
     </div>
