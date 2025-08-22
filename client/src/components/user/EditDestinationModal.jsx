@@ -11,16 +11,26 @@ export default function EditDestinationModal({
 
   const formData = {
     name: destination.name || "",
-    city: destination.location?.city || "",
-    country: destination.location?.country || "",
+    location: {
+      city: destination.location?.city || "",
+      country: destination.location?.country || "",
+    },
     continent: destination.continent || "",
     averageCost: destination.averageCost || "",
     seasonality: destination.seasonality || "",
-    travelDays: destination.travelTime?.days || 0,
-    travelHours: destination.travelTime?.hours || 0,
+    travelTime: {
+      days: destination.travelTime?.days || 0,
+      hours: destination.travelTime?.hours || 0,
+    },
     visitorsPerYear: destination.visitorsPerYear || "",
     description: destination.description || "",
     imageUrl: destination.images?.[0] || "",
+    author: {
+      name: destination.author?.name || "",
+      userId: destination.author?.userId || "",
+    },
+    likes: destination.likes || 0,
+    createdAt: destination.createdAt || new Date().toISOString(),
   };
 
   const handleFormSubmit = (formData) => {
@@ -50,7 +60,7 @@ export default function EditDestinationModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center p-4 border-b">
+        <div className="flex justify-between items-center p-4 border-b border-emerald-200">
           <h2 className="text-xl font-semibold text-gray-800">
             Edit Destination
           </h2>

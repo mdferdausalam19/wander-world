@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 export default function HeroBanner() {
   return (
     <div className="relative  w-full flex items-center justify-center pt-24 pb-12 md:pt-0 md:pb-0 bg-gradient-to-t from-emerald-100/50 via-emerald-200 to-emerald-300">
@@ -24,7 +26,10 @@ export default function HeroBanner() {
 
           {/* Call to Action */}
           <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-3 justify-center items-center w-full">
-            <button className="w-full sm:w-auto bg-emerald-50/20 backdrop-blur-sm border border-emerald-400  px-6 py-3 rounded-xl font-semibold hover:bg-emerald-50/50 transition-all duration-200 flex items-center justify-center text-gray-700">
+            <Link
+              to="/all-tourist-spots"
+              className="w-full sm:w-auto bg-emerald-50/20 backdrop-blur-sm border border-emerald-400  px-6 py-3 rounded-xl font-semibold hover:bg-emerald-50/50 transition-all duration-200 flex items-center justify-center text-gray-700"
+            >
               <svg
                 className="w-5 h-5 mr-2"
                 fill="none"
@@ -39,8 +44,11 @@ export default function HeroBanner() {
                 />
               </svg>
               Start Exploring
-            </button>
-            <button className="w-full sm:w-auto border border-emerald-400  px-6 py-3 rounded-xl font-semibold hover:bg-emerald-400/50 transition-all duration-200 flex items-center justify-center text-gray-700">
+            </Link>
+            <Link
+              to="/add-tourist-spot"
+              className="w-full sm:w-auto border border-emerald-400  px-6 py-3 rounded-xl font-semibold hover:bg-emerald-400/50 transition-all duration-200 flex items-center justify-center text-gray-700"
+            >
               <svg
                 className="w-5 h-5 mr-2"
                 fill="none"
@@ -55,7 +63,7 @@ export default function HeroBanner() {
                 />
               </svg>
               Add Destination
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -20,7 +20,6 @@ export const sampleDestinations = [
     author: { name: "John Doe", userId: "123" },
     likes: 5,
     createdAt: "2025-07-10T00:00:00Z",
-    updatedAt: "2025-07-15T00:00:00Z",
   },
   {
     id: 2,
@@ -43,7 +42,6 @@ export const sampleDestinations = [
     author: { name: "Jane Smith", userId: "456" },
     likes: 5,
     createdAt: "2025-07-12T00:00:00Z",
-    updatedAt: "2025-07-18T00:00:00Z",
   },
   {
     id: 3,
@@ -65,7 +63,6 @@ export const sampleDestinations = [
     author: { name: "Carlos Rodriguez", userId: "789" },
     likes: 5,
     createdAt: "2025-07-08T00:00:00Z",
-    updatedAt: "2025-07-20T00:00:00Z",
   },
   {
     id: 4,
@@ -88,7 +85,6 @@ export const sampleDestinations = [
     author: { name: "Yuki Tanaka", userId: "101" },
     likes: 5,
     createdAt: "2025-07-14T00:00:00Z",
-    updatedAt: "2025-07-22T00:00:00Z",
   },
   {
     id: 5,
@@ -111,7 +107,6 @@ export const sampleDestinations = [
     author: { name: "Ahmed Hassan", userId: "202" },
     likes: 5,
     createdAt: "2025-07-16T00:00:00Z",
-    updatedAt: "2025-07-23T00:00:00Z",
   },
   {
     id: 6,
@@ -134,7 +129,6 @@ export const sampleDestinations = [
     author: { name: "Hans Mueller", userId: "303" },
     likes: 5,
     createdAt: "2025-07-11T00:00:00Z",
-    updatedAt: "2025-07-19T00:00:00Z",
   },
   {
     id: 7,
@@ -157,7 +151,6 @@ export const sampleDestinations = [
     author: { name: "Sipho Ndlovu", userId: "701" },
     likes: 5,
     createdAt: "2025-07-10T00:00:00Z",
-    updatedAt: "2025-07-16T00:00:00Z",
   },
   {
     id: 8,
@@ -180,7 +173,6 @@ export const sampleDestinations = [
     author: { name: "Olivia Brown", userId: "801" },
     likes: 5,
     createdAt: "2025-07-11T00:00:00Z",
-    updatedAt: "2025-07-17T00:00:00Z",
   },
   {
     id: 9,
@@ -203,7 +195,6 @@ export const sampleDestinations = [
     author: { name: "Lucas Martin", userId: "901" },
     likes: 5,
     createdAt: "2025-07-12T00:00:00Z",
-    updatedAt: "2025-07-18T00:00:00Z",
   },
   {
     id: 10,
@@ -226,7 +217,6 @@ export const sampleDestinations = [
     author: { name: "Layla Haddad", userId: "1001" },
     likes: 5,
     createdAt: "2025-07-13T00:00:00Z",
-    updatedAt: "2025-07-19T00:00:00Z",
   },
   {
     id: 11,
@@ -249,7 +239,6 @@ export const sampleDestinations = [
     author: { name: "Sophie Wilson", userId: "1101" },
     likes: 5,
     createdAt: "2025-07-14T00:00:00Z",
-    updatedAt: "2025-07-20T00:00:00Z",
   },
   {
     id: 12,
@@ -272,7 +261,6 @@ export const sampleDestinations = [
     author: { name: "Giulia Rossi", userId: "1201" },
     likes: 5,
     createdAt: "2025-07-15T00:00:00Z",
-    updatedAt: "2025-07-21T00:00:00Z",
   },
   {
     id: 13,
@@ -295,7 +283,6 @@ export const sampleDestinations = [
     author: { name: "Omar Al-Farsi", userId: "1301" },
     likes: 5,
     createdAt: "2025-07-16T00:00:00Z",
-    updatedAt: "2025-07-22T00:00:00Z",
   },
   {
     id: 14,
@@ -318,7 +305,6 @@ export const sampleDestinations = [
     author: { name: "Ana Souza", userId: "1401" },
     likes: 5,
     createdAt: "2025-07-17T00:00:00Z",
-    updatedAt: "2025-07-23T00:00:00Z",
   },
   {
     id: 15,
@@ -341,7 +327,6 @@ export const sampleDestinations = [
     author: { name: "Jakub Novak", userId: "1501" },
     likes: 5,
     createdAt: "2025-07-18T00:00:00Z",
-    updatedAt: "2025-07-24T00:00:00Z",
   },
   {
     id: 16,
@@ -364,6 +349,5 @@ export const sampleDestinations = [
     author: { name: "Emily Johnson", userId: "1601" },
     likes: 5,
     createdAt: "2025-07-19T00:00:00Z",
-    updatedAt: "2025-07-25T00:00:00Z",
   },
 ];

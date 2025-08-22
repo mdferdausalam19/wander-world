@@ -13,6 +13,7 @@ const continents = [
 const seasonalityOptions = ["Year-round", "Summer", "Winter"];
 
 export default function SpotForm({ initialData = {}, onSubmit }) {
+  console.log(initialData);
   const [imageValid, setImageValid] = useState(true);
   const {
     register,
@@ -22,16 +23,26 @@ export default function SpotForm({ initialData = {}, onSubmit }) {
   } = useForm({
     defaultValues: {
       name: initialData.name || "",
-      city: initialData.city || "",
-      country: initialData.country || "",
+      location: {
+        city: initialData.location?.city || "",
+        country: initialData.location?.country || "",
+      },
       continent: initialData.continent || "",
       averageCost: initialData.averageCost || "",
       seasonality: initialData.seasonality || "",
-      travelDays: initialData.travelDays || 0,
-      travelHours: initialData.travelHours || 0,
+      travelTime: {
+        days: initialData.travelTime?.days || 0,
+        hours: initialData.travelTime?.hours || 0,
+      },
       visitorsPerYear: initialData.visitorsPerYear || "",
       description: initialData.description || "",
       imageUrl: initialData.imageUrl || "",
+      author: {
+        name: initialData.author?.name || "",
+        userId: initialData.author?.userId || "",
+      },
+      likes: initialData.likes || 0,
+      createdAt: initialData.createdAt || new Date().toISOString(),
     },
   });
 
@@ -67,10 +78,12 @@ export default function SpotForm({ initialData = {}, onSubmit }) {
             type="text"
             placeholder="e.g. Cusco"
             className="w-full border-emerald-500 border rounded-lg px-3 py-2 focus:outline-emerald-500 focus:ring-emerald-500 focus:border-emerald-400"
-            {...register("city", { required: "City is required" })}
+            {...register("location.city", { required: "City is required" })}
           />
-          {errors.city && (
-            <p className="text-red-500 text-xs mt-1">{errors.city.message}</p>
+          {errors.location?.city && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.location.city.message}
+            </p>
           )}
         </div>
         <div className="flex-1">
@@ -81,11 +94,13 @@ export default function SpotForm({ initialData = {}, onSubmit }) {
             type="text"
             placeholder="e.g. Peru"
             className="w-full border-emerald-500 border rounded-lg px-3 py-2 focus:outline-emerald-500 focus:ring-emerald-500 focus:border-emerald-400"
-            {...register("country", { required: "Country/Region is required" })}
+            {...register("location.country", {
+              required: "Country/Region is required",
+            })}
           />
-          {errors.country && (
+          {errors.location?.country && (
             <p className="text-red-500 text-xs mt-1">
-              {errors.country.message}
+              {errors.location.country.message}
             </p>
           )}
         </div>
@@ -168,15 +183,15 @@ export default function SpotForm({ initialData = {}, onSubmit }) {
               placeholder="e.g. 2"
               min="0"
               className="w-full border-emerald-500 border rounded-lg px-3 py-2 focus:outline-emerald-500 focus:ring-emerald-500 focus:border-emerald-400"
-              {...register("travelDays", {
+              {...register("travelTime.days", {
                 required: "Days required",
                 min: { value: 0, message: "Cannot be negative" },
                 valueAsNumber: true,
               })}
             />
-            {errors.travelDays && (
+            {errors.travelTime?.days && (
               <p className="text-red-500 text-xs mt-1">
-                {errors.travelDays.message}
+                {errors.travelTime.days.message}
               </p>
             )}
           </div>
@@ -190,16 +205,16 @@ export default function SpotForm({ initialData = {}, onSubmit }) {
               min="0"
               max="23"
               className="w-full border-emerald-500 border rounded-lg px-3 py-2 focus:outline-emerald-500 focus:ring-emerald-500 focus:border-emerald-400"
-              {...register("travelHours", {
+              {...register("travelTime.hours", {
                 required: "Hours required",
                 min: { value: 0, message: "Cannot be negative" },
                 max: { value: 23, message: "Max 23 hours" },
                 valueAsNumber: true,
               })}
             />
-            {errors.travelHours && (
+            {errors.travelTime?.hours && (
               <p className="text-red-500 text-xs mt-1">
-                {errors.travelHours.message}
+                {errors.travelTime.hours.message}
               </p>
             )}
           </div>

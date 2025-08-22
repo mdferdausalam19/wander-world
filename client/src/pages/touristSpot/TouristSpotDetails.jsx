@@ -129,7 +129,7 @@ export default function TouristSpotDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-emerald-50 ">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <div className="py-4">
