@@ -48,6 +48,7 @@ const usersData = [
     email: "john.doe@example.com",
     role: "user",
     status: "active",
+    registeredAt: "2025-07-10T00:00:00Z",
   },
   {
     id: 2,
@@ -56,6 +57,7 @@ const usersData = [
     email: "jane.smith@example.com",
     role: "user",
     status: "active",
+    registeredAt: "2025-07-10T00:00:00Z",
   },
 ];
 
@@ -67,6 +69,7 @@ const hostsData = [
     email: "john.doe@example.com",
     role: "host",
     status: "active",
+    registeredAt: "2025-07-10T00:00:00Z",
   },
   {
     id: 2,
@@ -75,6 +78,7 @@ const hostsData = [
     email: "jane.smith@example.com",
     role: "host",
     status: "active",
+    registeredAt: "2025-07-10T00:00:00Z",
   },
 ];
 

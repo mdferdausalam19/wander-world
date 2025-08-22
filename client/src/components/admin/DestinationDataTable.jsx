@@ -9,7 +9,7 @@ export default function DestinationDataTable({ data }) {
 
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead>
+          <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Image
@@ -21,10 +21,17 @@ export default function DestinationDataTable({ data }) {
                 Location
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Host
+                Continent
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Likes
+                AVG. Cost
+              </th>
+
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Date Added
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Host
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Actions
@@ -48,11 +55,20 @@ export default function DestinationDataTable({ data }) {
                   {item.location?.city}, {item.location?.country}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                  {item.author?.name}
+                  {item.continent}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                  {item.likes}
+                  <span className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">
+                    ${item.averageCost}
+                  </span>
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                  {new Date(item.createdAt).toLocaleDateString()}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                  {item.author?.name}
+                </td>
+
                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                   <div className="flex space-x-3">
                     <button

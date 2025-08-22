@@ -76,7 +76,7 @@ export default function MyList() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-              My Hosted Destinations
+              Your Hosted Destinations
             </h1>
             <p className="text-gray-600 mt-1">
               Manage all the destinations you've listed as a host

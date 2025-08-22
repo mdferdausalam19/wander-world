@@ -10,7 +10,7 @@ export default function UserDataTable({ data }) {
 
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead>
+            <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Image
@@ -26,6 +26,9 @@ export default function UserDataTable({ data }) {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  Registered At
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Actions
@@ -51,14 +54,19 @@ export default function UserDataTable({ data }) {
                   <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                     {item.role}
                   </td>
-                  <td
-                    className={`px-6 py-4 whitespace-nowrap text-left text-sm font-medium ${
-                      item.status === "active"
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {item.status}
+                  <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                    <span
+                      className={`px-2 py-1 rounded ${
+                        item.status === "active"
+                          ? "bg-emerald-100 text-emerald-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {item.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                    {new Date(item.registeredAt).toLocaleDateString()}
                   </td>
                   <td
                     className={`px-6 py-4 whitespace-nowrap text-left text-sm font-medium ${
