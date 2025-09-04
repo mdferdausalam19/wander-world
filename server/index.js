@@ -23,6 +23,37 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const database = client.db("wander-world");
+    const usersCollection = database.collection("users");
+
+    // API route to save user data
+    app.post("/users", async (req, res) => {
+      try {
+        const user = req.body;
+        const query = { uid: user.uid };
+
+        // if existing user try to sign in again
+        const existingUser = await usersCollection.findOne(query);
+        if (existingUser) {
+          return res.status(200).json({
+            message: "Registered user found!",
+          });
+        }
+        const result = await usersCollection.insertOne({
+          ...user,
+          registeredAt: new Date().toISOString(),
+        });
+        res.status(201).json({
+          message: "User added successfully!",
+        });
+      } catch (err) {
+        console.error("Error adding user: ", err.message);
+        res.status(500).json({
+          message: "Failed to add user.",
+        });
+      }
+    });
+
     console.log("Connected to MongoDB successfully!");
   } catch (err) {
     // Log any errors during connection or runtime
