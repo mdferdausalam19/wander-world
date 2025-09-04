@@ -14,6 +14,10 @@ export default function EditDestinationModal({
     location: {
       city: destination.location?.city || "",
       country: destination.location?.country || "",
+      coordinates: {
+        lat: destination.location?.coordinates?.lat || 0,
+        lng: destination.location?.coordinates?.lng || 0,
+      },
     },
     continent: destination.continent || "",
     averageCost: destination.averageCost || "",
@@ -41,6 +45,10 @@ export default function EditDestinationModal({
         ...destination.location,
         city: formData.city,
         country: formData.country,
+        coordinates: {
+          lat: Number(formData.latitude) || 0,
+          lng: Number(formData.longitude) || 0,
+        },
       },
       continent: formData.continent,
       averageCost: Number(formData.averageCost),
@@ -78,6 +86,9 @@ export default function EditDestinationModal({
             onSubmit={handleFormSubmit}
             onCancel={onCancel}
             isEditing={true}
+            formType="edit"
+            btnText="Update Spot"
+            btnLoadingText="Updating Spot..."
           />
         </div>
       </div>

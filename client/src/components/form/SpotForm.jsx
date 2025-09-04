@@ -12,8 +12,15 @@ const continents = [
 ];
 const seasonalityOptions = ["Year-round", "Summer", "Winter"];
 
-export default function SpotForm({ initialData = {}, onSubmit }) {
-  console.log(initialData);
+export default function SpotForm({
+  initialData = {},
+  onSubmit,
+  btnText,
+  btnLoadingText,
+  isSpotAddLoading,
+  isSpotUpdateLoading,
+  formType,
+}) {
   const [imageValid, setImageValid] = useState(true);
   const {
     register,
@@ -26,6 +33,10 @@ export default function SpotForm({ initialData = {}, onSubmit }) {
       location: {
         city: initialData.location?.city || "",
         country: initialData.location?.country || "",
+        coordinates: {
+          lat: initialData.location?.coordinates?.lat || 0,
+          lng: initialData.location?.coordinates?.lng || 0,
+        },
       },
       continent: initialData.continent || "",
       averageCost: initialData.averageCost || "",
@@ -101,6 +112,46 @@ export default function SpotForm({ initialData = {}, onSubmit }) {
           {errors.location?.country && (
             <p className="text-red-500 text-xs mt-1">
               {errors.location.country.message}
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1">
+          <label className="block text-gray-700 font-medium mb-1">
+            Latitude
+          </label>
+          <input
+            type="number"
+            step={"any"}
+            placeholder="e.g. 12.3456"
+            className="w-full border-emerald-500 border rounded-lg px-3 py-2 focus:outline-emerald-500 focus:ring-emerald-500 focus:border-emerald-400"
+            {...register("location.coordinates.lat", {
+              required: "Latitude is required",
+            })}
+          />
+          {errors.location?.coordinates?.lat && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.location.coordinates.lat.message}
+            </p>
+          )}
+        </div>
+        <div className="flex-1">
+          <label className="block text-gray-700 font-medium mb-1">
+            Longitude
+          </label>
+          <input
+            type="number"
+            step={"any"}
+            placeholder="e.g. 12.3456"
+            className="w-full border-emerald-500 border rounded-lg px-3 py-2 focus:outline-emerald-500 focus:ring-emerald-500 focus:border-emerald-400"
+            {...register("location.coordinates.lng", {
+              required: "Longitude is required",
+            })}
+          />
+          {errors.location?.coordinates?.lng && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.location.coordinates.lng.message}
             </p>
           )}
         </div>
@@ -299,7 +350,13 @@ export default function SpotForm({ initialData = {}, onSubmit }) {
         type="submit"
         className="w-full bg-emerald-600 text-white rounded-xl py-3 font-semibold hover:bg-emerald-700 transition-colors"
       >
-        Save Spot
+        {formType === "add"
+          ? isSpotAddLoading
+            ? btnLoadingText
+            : btnText
+          : isSpotUpdateLoading
+          ? btnLoadingText
+          : btnText}
       </button>
     </form>
   );
