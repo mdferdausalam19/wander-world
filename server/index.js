@@ -91,6 +91,25 @@ async function run() {
       }
     });
 
+    // API route to get all destinations
+    app.get("/destinations", async (req, res) => {
+      try {
+        const destinations = await spotsCollection.find({}).toArray();
+        res.status(200).json({
+          success: true,
+          message: "Destinations fetched successfully!",
+          data: destinations,
+        });
+      } catch (err) {
+        console.error("Error in /destinations endpoint:", err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch destinations",
+          error: err.message,
+        });
+      }
+    });
+
     // API route to add a destination
     app.post("/destinations", async (req, res) => {
       try {
