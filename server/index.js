@@ -25,6 +25,7 @@ async function run() {
   try {
     const database = client.db("wander-world");
     const usersCollection = database.collection("users");
+    const spotsCollection = database.collection("spots");
 
     // API route to save user data
     app.post("/users", async (req, res) => {
@@ -85,6 +86,39 @@ async function run() {
         res.status(500).json({
           success: false,
           message: "Failed to process user data",
+          error: err.message,
+        });
+      }
+    });
+
+    // API route to add a destination
+    app.post("/destinations", async (req, res) => {
+      try {
+        const destination = req.body;
+
+        if (
+          !destination.name ||
+          !destination.imageUrl ||
+          !destination.location
+        ) {
+          return res.status(400).json({
+            success: false,
+            message:
+              "Missing required fields: name, image, and location are required",
+          });
+        }
+
+        const result = await spotsCollection.insertOne(destination);
+
+        res.status(201).json({
+          success: true,
+          message: "Destination added successfully!",
+        });
+      } catch (err) {
+        console.error("Error in /destinations endpoint:", err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to process destination data",
           error: err.message,
         });
       }
