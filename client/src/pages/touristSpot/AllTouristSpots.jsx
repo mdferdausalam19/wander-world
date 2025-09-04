@@ -1,11 +1,22 @@
 import React, { useState } from "react";
-import { sampleDestinations } from "../../data/sampleDestinations";
 import TouristSpotCard from "../../components/touristSpot/TouristSpotCard";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 
 export default function AllTouristSpots() {
   const [search, setSearch] = useState("");
   const [continent, setContinent] = useState("");
   const [sort, setSort] = useState("name");
+  const axiosCommon = useAxiosCommon();
+
+  const { data: spots = [], isLoading } = useQuery({
+    queryKey: ["spots"],
+    queryFn: async () => {
+      const { data } = await axiosCommon.get("/destinations");
+      return data.data;
+    },
+  });
 
   const continents = [
     "",
@@ -17,7 +28,7 @@ export default function AllTouristSpots() {
     "South America",
     "Antarctica",
   ];
-  const sortedSpots = [...sampleDestinations]
+  const sortedSpots = [...spots]
     .filter(
       (spot) =>
         spot.name.toLowerCase().includes(search.toLowerCase()) &&
@@ -72,7 +83,9 @@ export default function AllTouristSpots() {
           </select>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {sortedSpots.length === 0 ? (
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : sortedSpots.length === 0 ? (
             <div className="col-span-full text-center text-gray-400 border border-emerald-600 p-10 rounded-lg bg-emerald-50/50 ">
               <h2 className="text-2xl font-bold text-emerald-700 mb-2">
                 No destinations found.
@@ -81,7 +94,7 @@ export default function AllTouristSpots() {
             </div>
           ) : (
             sortedSpots.map((spot) => (
-              <TouristSpotCard key={spot.id} spot={spot} />
+              <TouristSpotCard key={spot._id} spot={spot} />
             ))
           )}
         </div>

@@ -22,7 +22,7 @@ export default function TouristSpotCard({ spot }) {
     <div className="group bg-white rounded-xl shadow hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
       <div className="w-full aspect-video overflow-hidden">
         <img
-          src={spot.images[0]}
+          src={spot.imageUrl}
           alt={spot.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
@@ -55,7 +55,7 @@ export default function TouristSpotCard({ spot }) {
           </span>
         </div>
         <Link
-          to={`/tourist-spot/${spot.id}`}
+          to={`/tourist-spot/${spot._id}`}
           className="mt-4 w-full bg-emerald-500 text-white rounded-xl py-2 font-semibold shadow hover:bg-emerald-600 transition-colors text-sm cursor-pointer hover:shadow-md text-center"
         >
           View Details

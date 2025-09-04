@@ -1,14 +1,23 @@
-import { useState } from "react";
 import TouristSpotCard from "../touristSpot/TouristSpotCard";
-import { sampleDestinations } from "../../data/sampleDestinations";
 import { Link } from "react-router";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "../Shared/LoadingSpinner";
 
-export default function PopularDestinations({ spots = sampleDestinations }) {
-  const [liked, setLiked] = useState({});
+export default function PopularDestinations() {
+  const axiosCommon = useAxiosCommon();
 
-  const handleLike = (id, isLiked) => {
-    setLiked((prev) => ({ ...prev, [id]: isLiked }));
-  };
+  const { data: spots = [], isLoading } = useQuery({
+    queryKey: ["spots"],
+    queryFn: async () => {
+      const { data } = await axiosCommon.get("/destinations");
+      return data.data;
+    },
+  });
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   if (!spots || spots.length === 0) {
     return (
@@ -43,12 +52,7 @@ export default function PopularDestinations({ spots = sampleDestinations }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {spots.slice(0, 12).map((spot) => (
-          <TouristSpotCard
-            key={spot.id}
-            spot={spot}
-            liked={liked[spot.id] || false}
-            onLike={handleLike}
-          />
+          <TouristSpotCard key={spot._id} spot={spot} />
         ))}
       </div>
       <div className="flex justify-center mt-10">
