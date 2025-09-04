@@ -36,6 +36,7 @@ export default function UserProfile() {
       <div className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center border border-emerald-100 max-w-xl mx-auto">
         <img
           src={user?.photoURL || "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg"}
+          referrerPolicy="no-referrer"
           alt={user?.displayName || "User"}
           className="w-28 h-28 rounded-full border-4 border-emerald-400 object-cover shadow mb-4"
         />

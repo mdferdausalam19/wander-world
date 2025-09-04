@@ -102,6 +102,7 @@ export default function Navbar() {
                     }
                     alt="Profile"
                     className="w-8 h-8 rounded-full border"
+                    referrerPolicy="no-referrer"
                   />
                   <span className="hidden sm:block text-sm font-medium">
                     {user.displayName || "User"}

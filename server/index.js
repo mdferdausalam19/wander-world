@@ -30,26 +30,62 @@ async function run() {
     app.post("/users", async (req, res) => {
       try {
         const user = req.body;
-        const query = { uid: user.uid };
 
-        // if existing user try to sign in again
-        const existingUser = await usersCollection.findOne(query);
-        if (existingUser) {
-          return res.status(200).json({
-            message: "Registered user found!",
+        if (!user.uid || !user.email) {
+          return res.status(400).json({
+            success: false,
+            message: "Missing required fields: uid and email are required",
           });
         }
-        const result = await usersCollection.insertOne({
-          ...user,
+
+        const query = { uid: user.uid };
+        const existingUser = await usersCollection.findOne(query);
+
+        if (existingUser) {
+          if (
+            (!existingUser.name || existingUser.name === "New User") &&
+            user.name
+          ) {
+            const updateResult = await usersCollection.updateOne(
+              { _id: existingUser._id },
+              {
+                $set: {
+                  name: user.name,
+                  updatedAt: new Date().toISOString(),
+                },
+              }
+            );
+          }
+          return res.status(200).json({
+            success: true,
+            message: "User processed successfully",
+            isNew: false,
+          });
+        }
+
+        const newUser = {
+          uid: user.uid,
+          name: user.name || "New User",
+          email: user.email,
+          avatar: user.avatar || "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
+          role: user.role || "General",
           registeredAt: new Date().toISOString(),
-        });
+          updatedAt: new Date().toISOString(),
+        };
+
+        const result = await usersCollection.insertOne(newUser);
+
         res.status(201).json({
+          success: true,
           message: "User added successfully!",
+          isNew: true,
         });
       } catch (err) {
-        console.error("Error adding user: ", err.message);
+        console.error("Error in /users endpoint:", err);
         res.status(500).json({
-          message: "Failed to add user.",
+          success: false,
+          message: "Failed to process user data",
+          error: err.message,
         });
       }
     });

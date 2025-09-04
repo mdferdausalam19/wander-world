@@ -45,19 +45,28 @@ export default function SignUp() {
       setLoading(true);
       const { user } = await createUser(email, password);
       await updateUserProfile(fullName, image);
-      await axiosCommon.post("/users", {
+
+      const userData = {
         uid: user.uid,
-        name: fullName,
-        email,
+        name: fullName.trim(),
+        email: user.email,
         avatar: image || "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
         role: "General",
-      });
+      };
+
+      await axiosCommon.post("/users", userData);
+
       navigate("/");
       toast.success("Sign up successful!");
       reset();
     } catch (err) {
+      console.error("Signup error:", err);
       setLoading(false);
-      toast.error(err.message);
+      toast.error(
+        err.response?.data?.message ||
+          err.message ||
+          "Signup failed. Please try again."
+      );
     }
   };
 
