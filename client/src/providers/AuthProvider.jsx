@@ -11,6 +11,7 @@ import {
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
 import { AuthContext } from "../contexts";
+import axios from "axios";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -56,8 +57,27 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
+  // save user in database
+  const saveUser = async (user) => {
+    const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/users`, {
+      uid: user?.uid,
+      email: user?.email,
+      name: user?.displayName,
+      avatar: user?.photoURL || "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
+      role: "General",
+    });
+    return data;
+  };
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        try {
+          await saveUser(currentUser);
+        } catch (err) {
+          console.error("Error saving user: ", err.message);
+        }
+      }
       setUser(currentUser || null);
       setLoading(false);
     });
