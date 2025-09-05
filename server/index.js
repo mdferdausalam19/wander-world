@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB dependencies and client initialization
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = process.env.DATABASE_URI;
 
 // Create a new MongoDB client with configuration
@@ -105,6 +105,29 @@ async function run() {
         res.status(500).json({
           success: false,
           message: "Failed to fetch destinations",
+          error: err.message,
+        });
+      }
+    });
+
+    // API route to get a destination by ID
+    app.get("/destinations/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const destination = await spotsCollection.findOne({
+          _id: new ObjectId(id),
+        });
+        console.log(destination);
+        res.status(200).json({
+          success: true,
+          message: "Destination fetched successfully!",
+          data: destination,
+        });
+      } catch (err) {
+        console.error("Error in /destinations/:id endpoint:", err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch destination",
           error: err.message,
         });
       }
