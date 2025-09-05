@@ -117,7 +117,6 @@ async function run() {
         const destination = await spotsCollection.findOne({
           _id: new ObjectId(id),
         });
-        console.log(destination);
         res.status(200).json({
           success: true,
           message: "Destination fetched successfully!",
@@ -128,6 +127,28 @@ async function run() {
         res.status(500).json({
           success: false,
           message: "Failed to fetch destination",
+          error: err.message,
+        });
+      }
+    });
+
+    // API route to get all destination for a specific user
+    app.get("/destinations/user/:uid", async (req, res) => {
+      try {
+        const { uid } = req.params;
+        const destinations = await spotsCollection
+          .find({ "author.uid": uid })
+          .toArray();
+        res.status(200).json({
+          success: true,
+          message: "Destinations fetched successfully!",
+          data: destinations,
+        });
+      } catch (err) {
+        console.error("Error in /destinations/:uid endpoint:", err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch destinations",
           error: err.message,
         });
       }
