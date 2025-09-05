@@ -210,6 +210,27 @@ async function run() {
       }
     });
 
+    // API route to delete a destination
+    app.delete("/destinations/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const result = await spotsCollection.deleteOne({
+          _id: new ObjectId(id),
+        });
+        res.status(200).json({
+          success: true,
+          message: "Destination deleted successfully!",
+        });
+      } catch (err) {
+        console.error("Error in /destination/:id endpoint:", err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to delete destination",
+          error: err.message,
+        });
+      }
+    });
+
     console.log("Connected to MongoDB successfully!");
   } catch (err) {
     // Log any errors during connection or runtime
