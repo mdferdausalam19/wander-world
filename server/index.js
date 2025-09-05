@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
+const axios = require("axios");
 
 // Middleware setup for CORS and JSON parsing
 app.use(cors());
@@ -227,6 +228,65 @@ async function run() {
           success: false,
           message: "Failed to delete destination",
           error: err.message,
+        });
+      }
+    });
+
+    // API route to get weather data
+    app.get("/weather", async (req, res) => {
+      try {
+        const { city, lat, lon } = req.query;
+
+        if (
+          (!city && (!lat || !lon)) ||
+          (city && (!lat || !lon)) ||
+          (!city && lat && lon)
+        ) {
+          return res.status(400).json({
+            success: false,
+            message:
+              "Please provide either city name OR latitude and longitude",
+          });
+        }
+
+        const apiKey = process.env.OPENWEATHER_API_KEY;
+        if (!apiKey) {
+          throw new Error("OpenWeather API key is not configured");
+        }
+
+        let url = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&units=metric`;
+
+        if (city) {
+          url += `&q=${encodeURIComponent(city)}`;
+        } else {
+          url += `&lat=${lat}&lon=${lon}`;
+        }
+
+        const response = await axios.get(url);
+
+        const weatherData = {
+          temp: Math.round(response?.data?.main?.temp),
+          feels_like: Math.round(response?.data?.main?.feels_like),
+          condition: response?.data?.weather?.[0]?.main,
+          description: response?.data?.weather?.[0]?.description,
+          humidity: response?.data?.main?.humidity,
+          wind_speed: Math.round(response?.data?.wind?.speed * 3.6),
+          city: response?.data?.name,
+          country: response?.data?.sys?.country,
+        };
+
+        res.json({
+          success: true,
+          data: weatherData,
+        });
+      } catch (error) {
+        console.error("Weather API error:", error.message);
+        const status = error.response?.status || 500;
+        const message =
+          error.response?.data?.message || "Failed to fetch weather data";
+        res.status(status).json({
+          success: false,
+          message: message,
         });
       }
     });
