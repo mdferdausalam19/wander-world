@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router";
 import { FaPlus } from "react-icons/fa";
 import UserStats from "../../components/user/UserStats";
@@ -8,8 +8,9 @@ import EditDestinationModal from "../../components/user/EditDestinationModal";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import toast from "react-hot-toast";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
 
 export default function MyList() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -17,6 +18,7 @@ export default function MyList() {
   const [selectedDestination, setSelectedDestination] = useState(null);
   const { user, isLoading: userLoading } = useAuth();
   const axiosCommon = useAxiosCommon();
+  const queryClient = useQueryClient();
 
   const { data: spots = [], isLoading: spotsLoading } = useQuery({
     queryKey: ["spots", user?.uid],
@@ -27,24 +29,43 @@ export default function MyList() {
     },
   });
 
+  const { mutateAsync: updateDestination } = useMutation({
+    mutationFn: async (destination) => {
+      const { data } = await axiosCommon.put(
+        `/destinations/${destination._id}`,
+        destination
+      );
+      return data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["spots", user?.uid],
+      });
+      toast.success("Destination updated successfully!");
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error("Failed to update destination");
+    },
+  });
+
   const handleEdit = (destination) => {
     setSelectedDestination(destination);
     setShowEditModal(true);
   };
 
-  const handleDeleteClick = (id) => {
-    const destination = spots.find((dest) => dest.id === id);
+  const handleSaveEdit = async (updatedDestination) => {
+    await updateDestination(updatedDestination);
+    setShowEditModal(false);
+  };
+
+  const handleDeleteClick = (destination) => {
     setSelectedDestination(destination);
     setShowDeleteModal(true);
   };
 
   const handleDeleteConfirm = () => {
     setShowDeleteModal(false);
-    toast.success("Destination deleted successfully!");
-  };
-
-  const handleSaveEdit = (updatedDestination) => {
-    setShowEditModal(false);
     toast.success("Destination deleted successfully!");
   };
 
@@ -88,9 +109,12 @@ export default function MyList() {
         <div className="bg-white rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
           <MyListTable
             destinations={spots}
-            onDelete={handleDeleteClick}
+            onDelete={(id) => {
+              const destination = spots.find((dest) => dest._id === id);
+              handleDeleteClick(destination);
+            }}
             onEdit={(id) => {
-              const destination = spots.find((dest) => dest.id === id);
+              const destination = spots.find((dest) => dest._id === id);
               handleEdit(destination);
             }}
           />

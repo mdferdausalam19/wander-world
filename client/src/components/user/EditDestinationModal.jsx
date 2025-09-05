@@ -1,5 +1,6 @@
 import { FaTimes } from "react-icons/fa";
 import SpotForm from "../form/SpotForm";
+import useAuth from "../../hooks/useAuth";
 
 export default function EditDestinationModal({
   open,
@@ -7,6 +8,7 @@ export default function EditDestinationModal({
   onSave,
   onCancel,
 }) {
+  const { user } = useAuth();
   if (!open || !destination) return null;
 
   const formData = {
@@ -28,10 +30,12 @@ export default function EditDestinationModal({
     },
     visitorsPerYear: destination.visitorsPerYear || "",
     description: destination.description || "",
-    imageUrl: destination.images?.[0] || "",
+    imageUrl: destination.imageUrl || "",
     author: {
+      uid: destination.author?.uid || "",
       name: destination.author?.name || "",
-      userId: destination.author?.userId || "",
+      email: destination.author?.email || "",
+      avatar: destination.author?.avatar || "",
     },
     likes: destination.likes || 0,
     createdAt: destination.createdAt || new Date().toISOString(),
@@ -43,23 +47,29 @@ export default function EditDestinationModal({
       name: formData.name,
       location: {
         ...destination.location,
-        city: formData.city,
-        country: formData.country,
+        city: formData.location.city,
+        country: formData.location.country,
         coordinates: {
-          lat: Number(formData.latitude) || 0,
-          lng: Number(formData.longitude) || 0,
+          lat: Number(formData.location.coordinates.lat) || 0,
+          lng: Number(formData.location.coordinates.lng) || 0,
         },
       },
       continent: formData.continent,
       averageCost: Number(formData.averageCost),
       seasonality: formData.seasonality,
       travelTime: {
-        days: Number(formData.travelDays) || 0,
-        hours: Number(formData.travelHours) || 0,
+        days: Number(formData.travelTime.days) || 0,
+        hours: Number(formData.travelTime.hours) || 0,
       },
       visitorsPerYear: Number(formData.visitorsPerYear),
       description: formData.description,
-      images: [formData.imageUrl],
+      imageUrl: formData.imageUrl,
+      author: {
+        uid: user?.uid,
+        name: user?.displayName,
+        email: user?.email,
+        avatar: user?.photoURL,
+      },
     };
 
     onSave(updatedDestination);
