@@ -2,7 +2,7 @@ import TouristSpotCard from "../touristSpot/TouristSpotCard";
 import { Link } from "react-router";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useQuery } from "@tanstack/react-query";
-import LoadingSpinner from "../Shared/LoadingSpinner";
+import LoadingSpinner from "../shared/LoadingSpinner";
 
 export default function PopularDestinations() {
   const axiosCommon = useAxiosCommon();

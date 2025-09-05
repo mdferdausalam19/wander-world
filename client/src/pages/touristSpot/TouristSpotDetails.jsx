@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import {
   FaMapMarkerAlt,
@@ -8,8 +7,9 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
-import { sampleDestinations } from "../../data/sampleDestinations";
 import WeatherWidget from "../../components/weather/WeatherWidget";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useQuery } from "@tanstack/react-query";
 
 const formatTravelTime = (travelTime) => {
   if (!travelTime) return "N/A";
@@ -25,87 +25,22 @@ const formatTravelTime = (travelTime) => {
   return parts.join(" ") || "Less than an hour";
 };
 
-const findSpotById = (id) => {
-  return sampleDestinations.find(
-    (spot) => spot.id.toString() === id.toString()
-  );
-};
-
 export default function TouristSpotDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [spot, setSpot] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
 
-  // Handle like functionality
-  const handleLike = async () => {
-    try {
-      // Optimistic UI update
-      const newLikeStatus = !isLiked;
-      setIsLiked(newLikeStatus);
-      setLikeCount((prev) => (newLikeStatus ? prev + 1 : prev - 1));
+  const axiosCommon = useAxiosCommon();
 
-      // TODO: Replace with actual API call when backend is ready
+  const { data: spot = {}, isLoading } = useQuery({
+    queryKey: ["spot", id],
+    enabled: !!id,
+    queryFn: async () => {
+      const { data } = await axiosCommon.get(`/destinations/${id}`);
+      return data.data;
+    },
+  });
 
-      toast.success(newLikeStatus ? "Liked this spot!" : "Liked removed!");
-    } catch (error) {
-      // Revert on error
-      setIsLiked(!isLiked);
-      setLikeCount((prev) => (isLiked ? prev + 1 : prev - 1));
-      toast.error("Failed to update like status");
-      console.error("Error updating like:", error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchSpot = async () => {
-      try {
-        setLoading(true);
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 200));
-
-        // Find the spot in our sample data
-        const foundSpot = findSpotById(id);
-
-        if (!foundSpot) {
-          throw new Error("Destination not found");
-        }
-
-        // Transform the data to match our component's expected format
-        const spotData = {
-          ...foundSpot,
-          city: foundSpot.location.city,
-          country: foundSpot.location.country,
-          continent: foundSpot.location.continent,
-          imageUrl: foundSpot.images[0],
-          additionalImages: foundSpot.images.slice(1),
-          averageCost: foundSpot.averageCost,
-          seasonality: foundSpot.seasonality,
-          visitorsPerYear: foundSpot.visitorsPerYear,
-          travelTime: foundSpot.travelTime,
-          description: foundSpot.description || "No description available.",
-          likes: foundSpot.likes || 0,
-          isLiked: false, // This would come from the server based on user auth
-        };
-
-        setSpot(spotData);
-        setLikeCount(spotData.likes);
-        setIsLiked(spotData.isLiked);
-      } catch (error) {
-        console.error("Error fetching destination:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchSpot();
-    }
-  }, [id]);
-
-  if (loading) {
+  if (isLoading) {
     return <LoadingSpinner />;
   }
 
@@ -146,7 +81,7 @@ export default function TouristSpotDetails() {
         <div className="relative h-96 rounded-xl overflow-hidden mt-4">
           <div className="absolute inset-0">
             <img
-              src={spot.images?.[0] || spot.imageUrl}
+              src={spot.imageUrl}
               alt={spot.name}
               className="w-full h-full object-cover"
             />
@@ -210,7 +145,7 @@ export default function TouristSpotDetails() {
                   <p className="text-sm text-gray-500">Total Likes</p>
                   <p className="flex items-center mt-1">
                     <FaHeart className="text-xl text-emerald-500 mr-2" />
-                    <span className="font-medium">{likeCount}</span>
+                    <span className="font-medium">{spot.likes}</span>
                   </p>
                 </div>
               </div>
@@ -250,16 +185,15 @@ export default function TouristSpotDetails() {
                 )}
                 <div className="flex items-center justify-start mt-6 border-t border-gray-100 pt-6">
                   <button
-                    onClick={handleLike}
                     className="flex items-center px-4 py-2 border border-emerald-500 
                     bg-emerald-100 text-emerald-900 rounded-lg hover:bg-emerald-50 hover:text-emerald-600 transition-colors cursor-pointer "
                   >
-                    {isLiked ? (
+                    {spot.likes ? (
                       <FaHeart className="mr-2 text-emerald-900" />
                     ) : (
                       <FaHeart className="mr-2 text-emerald-400" />
                     )}
-                    <span>{isLiked ? "Liked" : "Like"}</span>
+                    <span>{spot.likes}</span>
                   </button>
                 </div>
               </div>

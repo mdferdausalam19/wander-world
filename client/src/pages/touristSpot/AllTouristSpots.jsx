@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import TouristSpotCard from "../../components/touristSpot/TouristSpotCard";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useQuery } from "@tanstack/react-query";
-import LoadingSpinner from "../../components/Shared/LoadingSpinner";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
 
 export default function AllTouristSpots() {
   const [search, setSearch] = useState("");
