@@ -201,11 +201,7 @@ export default function TouristSpotDetails() {
             {/* Right Column */}
             <div className="space-y-6">
               {/* Weather Widget */}
-              <WeatherWidget
-                location={`${spot.location?.city || spot.city}, ${
-                  spot.location?.country || spot.country
-                }`}
-              />
+              <WeatherWidget location={spot?.location} />
             </div>
           </div>
         </div>
