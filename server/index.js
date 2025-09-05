@@ -187,6 +187,29 @@ async function run() {
       }
     });
 
+    // API route to update a destination
+    app.put("/destinations/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const destination = req.body;
+        const result = await spotsCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { ...destination, _id: new ObjectId(destination._id) } }
+        );
+        res.status(200).json({
+          success: true,
+          message: "Destination updated successfully!",
+        });
+      } catch (err) {
+        console.error("Error in /destination/:id endpoint:", err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to update destination",
+          error: err.message,
+        });
+      }
+    });
+
     console.log("Connected to MongoDB successfully!");
   } catch (err) {
     // Log any errors during connection or runtime
