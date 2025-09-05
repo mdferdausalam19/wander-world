@@ -49,6 +49,25 @@ export default function MyList() {
     },
   });
 
+  const { mutateAsync: deleteDestination } = useMutation({
+    mutationFn: async (destination) => {
+      const { data } = await axiosCommon.delete(
+        `/destinations/${destination._id}`
+      );
+      return data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["spots", user?.uid],
+      });
+      toast.success("Destination deleted successfully!");
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error("Failed to delete destination");
+    },
+  });
+
   const handleEdit = (destination) => {
     setSelectedDestination(destination);
     setShowEditModal(true);
@@ -64,9 +83,9 @@ export default function MyList() {
     setShowDeleteModal(true);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
+    await deleteDestination(selectedDestination);
     setShowDeleteModal(false);
-    toast.success("Destination deleted successfully!");
   };
 
   // Calculate user stats
