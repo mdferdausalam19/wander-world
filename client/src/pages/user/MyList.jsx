@@ -6,25 +6,26 @@ import MyListTable from "../../components/user/MyListTable";
 import DeleteDestinationModal from "../../components/user/DeleteDestinationModal";
 import EditDestinationModal from "../../components/user/EditDestinationModal";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
-import { sampleDestinations } from "../../data/sampleDestinations";
 import toast from "react-hot-toast";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useQuery } from "@tanstack/react-query";
+import useAuth from "../../hooks/useAuth";
 
 export default function MyList() {
-  const [destinations, setDestinations] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedDestination, setSelectedDestination] = useState(null);
+  const { user, isLoading: userLoading } = useAuth();
+  const axiosCommon = useAxiosCommon();
 
-  // Simulate loading data
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDestinations(sampleDestinations.slice(0, 5));
-      setLoading(false);
-    }, 800);
-
-    return () => clearTimeout(timer);
-  }, []);
+  const { data: spots = [], isLoading: spotsLoading } = useQuery({
+    queryKey: ["spots", user?.uid],
+    enabled: !!user?.uid && !userLoading,
+    queryFn: async () => {
+      const { data } = await axiosCommon.get(`/destinations/user/${user?.uid}`);
+      return data.data;
+    },
+  });
 
   const handleEdit = (destination) => {
     setSelectedDestination(destination);
@@ -32,40 +33,26 @@ export default function MyList() {
   };
 
   const handleDeleteClick = (id) => {
-    const destination = destinations.find((dest) => dest.id === id);
+    const destination = spots.find((dest) => dest.id === id);
     setSelectedDestination(destination);
     setShowDeleteModal(true);
   };
 
   const handleDeleteConfirm = () => {
-    if (selectedDestination) {
-      setDestinations(
-        destinations.filter((dest) => dest.id !== selectedDestination.id)
-      );
-      setShowDeleteModal(false);
-    }
+    setShowDeleteModal(false);
+    toast.success("Destination deleted successfully!");
   };
 
   const handleSaveEdit = (updatedDestination) => {
-    setDestinations(
-      destinations.map((dest) =>
-        dest.id === updatedDestination.id
-          ? { ...dest, ...updatedDestination }
-          : dest
-      )
-    );
     setShowEditModal(false);
     toast.success("Destination deleted successfully!");
   };
 
   // Calculate user stats
-  const totalDestinations = destinations.length;
-  const totalLikes = destinations.reduce(
-    (sum, dest) => sum + (dest.likes || 0),
-    0
-  );
+  const totalDestinations = spots.length;
+  const totalLikes = spots.reduce((sum, dest) => sum + (dest.likes || 0), 0);
 
-  if (loading) {
+  if (spotsLoading) {
     return <LoadingSpinner />;
   }
 
@@ -100,15 +87,15 @@ export default function MyList() {
         {/* Destinations Table */}
         <div className="bg-white rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
           <MyListTable
-            destinations={destinations}
+            destinations={spots}
             onDelete={handleDeleteClick}
             onEdit={(id) => {
-              const destination = destinations.find((dest) => dest.id === id);
+              const destination = spots.find((dest) => dest.id === id);
               handleEdit(destination);
             }}
           />
 
-          {destinations.length === 0 && (
+          {spots.length === 0 && (
             <div className="p-8 text-center">
               <svg
                 className="mx-auto h-12 w-12 text-gray-400"

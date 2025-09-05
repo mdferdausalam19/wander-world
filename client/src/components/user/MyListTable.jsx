@@ -69,13 +69,13 @@ export default function MyListTable({ destinations = [], onDelete, onEdit }) {
           <tbody className="bg-white divide-y divide-gray-200">
             {destinations.length > 0 ? (
               destinations.map((destination) => (
-                <tr key={destination.id} className="hover:bg-gray-50">
+                <tr key={destination._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <img
                           className="h-10 w-10 rounded-full object-cover"
-                          src={destination.images && destination.images[0]}
+                          src={destination.imageUrl}
                           alt={destination.name}
                         />
                       </div>
@@ -113,7 +113,7 @@ export default function MyListTable({ destinations = [], onDelete, onEdit }) {
                     <div className="flex items-center justify-end space-x-2">
                       <button
                         onClick={() =>
-                          navigate(`/tourist-spot/${destination.id}`)
+                          navigate(`/tourist-spot/${destination._id}`)
                         }
                         className="text-emerald-600 hover:text-emerald-900 p-1 rounded-full hover:bg-emerald-50 cursor-pointer"
                         title="View"
@@ -121,14 +121,14 @@ export default function MyListTable({ destinations = [], onDelete, onEdit }) {
                         <FaEye className="h-4 w-4" />
                       </button>
                       <button
-                        onClick={() => onEdit(destination.id)}
+                        onClick={() => onEdit(destination._id)}
                         className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-50"
                         title="Edit"
                       >
                         <FaEdit className="h-4 w-4" />
                       </button>
                       <button
-                        onClick={() => onDelete(destination.id)}
+                        onClick={() => onDelete(destination._id)}
                         className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-50"
                         title="Delete"
                       >
