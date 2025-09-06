@@ -92,6 +92,48 @@ async function run() {
       }
     });
 
+    // API route to update user data 
+    app.put("/users/:uid", async (req, res) => {
+      const { uid } = req.params;
+      const user = req.body;
+      try {
+        const query = { uid: uid };
+
+        // Find the user by uid
+        const existingUser = await usersCollection.findOne(query);
+
+        if (!existingUser) {
+          return res.status(404).json({
+            success: false,
+            message: "User not found",
+          });
+        }
+
+        // Update the user in the users collection
+        const userUpdateResult = await usersCollection.updateOne(query, {
+          $set: user,
+        });
+
+        // Update the author of all spots created by the user in the spots collection
+        const spotsUpdateResult = await spotsCollection.updateMany(
+          { "author.uid": uid },
+          { $set: { "author.name": user.name, "author.avatar": user.avatar } }
+        );
+
+        res.status(200).json({
+          success: true,
+          message: "User updated successfully!",
+        });
+      } catch (err) {
+        console.error("Error in /users/:uid endpoint:", err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to update user",
+          error: err.message,
+        });
+      }
+    });
+
     // API route to get all destinations
     app.get("/destinations", async (req, res) => {
       try {

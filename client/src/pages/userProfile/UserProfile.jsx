@@ -3,9 +3,11 @@ import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { TbFidgetSpinner } from "react-icons/tb";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
 
 export default function UserProfile() {
   const { user, updateUserProfile, loading, setLoading } = useAuth();
+  const axiosCommon = useAxiosCommon();
   const {
     register,
     handleSubmit,
@@ -18,7 +20,11 @@ export default function UserProfile() {
     try {
       setLoading(true);
       await updateUserProfile(displayName, photoURL);
-      toast.success("Profile updated!");
+      await axiosCommon.put(`/users/${user.uid}`, {
+        name: displayName,
+        avatar: photoURL,
+      });
+      toast.success("Profile updated successfully!");
       reset(data);
     } catch (err) {
       toast.error(err.message);

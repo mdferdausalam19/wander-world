@@ -5,7 +5,6 @@ import {
   FaHeart,
   FaRegHeart,
 } from "react-icons/fa";
-import { toast } from "react-hot-toast";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import WeatherWidget from "../../components/weather/WeatherWidget";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
@@ -202,6 +201,27 @@ export default function TouristSpotDetails() {
             <div className="space-y-6">
               {/* Weather Widget */}
               <WeatherWidget location={spot?.location} />
+              {/* Host Info */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-emerald-100">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                  Host Information
+                </h2>
+                <div className="flex items-center gap-4">
+                  <div>
+                    <img
+                      src={spot?.author?.avatar}
+                      alt="host avatar"
+                      className="w-20 h-20 rounded-full"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-medium">{spot?.author?.name}</p>
+                    <p className="text-sm text-gray-500">
+                      {spot?.author?.email}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
