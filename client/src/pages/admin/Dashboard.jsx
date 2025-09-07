@@ -3,14 +3,11 @@ import { FiUsers, FiHome, FiUser } from "react-icons/fi";
 import StatsCard from "../../components/admin/StatsCard";
 import DestinationDataTable from "../../components/admin/DestinationDataTable";
 import { FaHeart } from "react-icons/fa";
-import { sampleDestinations } from "../../data/sampleDestinations";
 import UserDataTable from "../../components/admin/UserDataTable";
 import HostDataTable from "../../components/admin/HostDataTable";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
-
-const destinationsData = [...sampleDestinations].slice(0, 2);
 
 const usersData = [
   {
@@ -66,7 +63,15 @@ export default function AdminDashboard() {
     },
   });
 
-  if (isLoading) {
+  const { data: destinations = [], isLoading: destinationsLoading } = useQuery({
+    queryKey: ["destinations"],
+    queryFn: async () => {
+      const { data } = await axiosCommon.get("/admin/destinations");
+      return data.data;
+    },
+  });
+
+  if (isLoading || destinationsLoading) {
     return <LoadingSpinner />;
   }
 
@@ -134,7 +139,7 @@ export default function AdminDashboard() {
         {/* Tab Content */}
         <div className="space-y-8">
           {activeTab === "destinations" && (
-            <DestinationDataTable data={destinationsData} />
+            <DestinationDataTable data={destinations} />
           )}
           {activeTab === "users" && <UserDataTable data={usersData} />}
           {activeTab === "hosts" && <HostDataTable data={hostsData} />}

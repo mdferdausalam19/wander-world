@@ -1,4 +1,4 @@
-import { FiEdit2, FiTrash2, FiEye } from "react-icons/fi";
+import { FiTrash2, FiEye } from "react-icons/fi";
 
 export default function DestinationDataTable({ data }) {
   return (
@@ -40,13 +40,15 @@ export default function DestinationDataTable({ data }) {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {data.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <img
-                    src={item.images[0]}
-                    alt={item.name}
-                    className="w-16 h-16 object-cover rounded-full"
-                  />
+              <tr key={item._id} className="hover:bg-gray-50">
+                <td className="px-6 py-4">
+                  <div className="w-14 h-14">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                   {item.name}
@@ -76,12 +78,6 @@ export default function DestinationDataTable({ data }) {
                       className="text-blue-600 hover:text-blue-900"
                     >
                       <FiEye className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={() => console.log("Edit", item)}
-                      className="text-emerald-600 hover:text-emerald-900"
-                    >
-                      <FiEdit2 className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => console.log("Delete", item)}

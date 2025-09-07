@@ -366,6 +366,25 @@ async function run() {
       }
     });
 
+    // API route to get all destinations
+    app.get("/admin/destinations", async (req, res) => {
+      try {
+        const destinations = await spotsCollection.find({}).toArray();
+        res.status(200).json({
+          success: true,
+          message: "Destinations fetched successfully!",
+          data: destinations,
+        });
+      } catch (error) {
+        console.error("Error fetching destinations:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch destinations",
+          error: error.message,
+        });
+      }
+    });
+
     console.log("Connected to MongoDB successfully!");
   } catch (err) {
     // Log any errors during connection or runtime
