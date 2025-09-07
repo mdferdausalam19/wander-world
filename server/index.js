@@ -111,7 +111,7 @@ async function run() {
 
         // Update the user in the users collection
         const userUpdateResult = await usersCollection.updateOne(query, {
-          $set: user,
+          $set: { ...user, updatedAt: new Date().toISOString() },
         });
 
         // Update the author of all spots created by the user in the spots collection
@@ -380,6 +380,25 @@ async function run() {
         res.status(500).json({
           success: false,
           message: "Failed to fetch destinations",
+          error: error.message,
+        });
+      }
+    });
+
+    // API route to get all users
+    app.get("/admin/users", async (req, res) => {
+      try {
+        const users = await usersCollection.find({}).toArray();
+        res.status(200).json({
+          success: true,
+          message: "Users fetched successfully!",
+          data: users,
+        });
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch users",
           error: error.message,
         });
       }
