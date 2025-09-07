@@ -6,39 +6,11 @@ import { FaHeart } from "react-icons/fa";
 import { sampleDestinations } from "../../data/sampleDestinations";
 import UserDataTable from "../../components/admin/UserDataTable";
 import HostDataTable from "../../components/admin/HostDataTable";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "../../components/shared/LoadingSpinner";
 
 const destinationsData = [...sampleDestinations].slice(0, 2);
-
-const statsData = [
-  {
-    id: 1,
-    title: "Total Destinations",
-    value: "1,234",
-    icon: <FiHome size={24} />,
-    color: "blue",
-  },
-  {
-    id: 2,
-    title: "Total Likes",
-    value: "356",
-    icon: <FaHeart size={24} />,
-    color: "amber",
-  },
-  {
-    id: 3,
-    title: "Registered Users",
-    value: "856",
-    icon: <FiUsers size={24} />,
-    color: "green",
-  },
-  {
-    id: 4,
-    title: "Total Hosts",
-    value: "342",
-    icon: <FiUser size={24} />,
-    color: "purple",
-  },
-];
 
 const usersData = [
   {
@@ -84,6 +56,19 @@ const hostsData = [
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("destinations");
+  const axiosCommon = useAxiosCommon();
+
+  const { data: stats = {}, isLoading } = useQuery({
+    queryKey: ["stats"],
+    queryFn: async () => {
+      const { data } = await axiosCommon.get("/admin/stats");
+      return data.data;
+    },
+  });
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="min-h-screen p-6">
@@ -97,15 +82,30 @@ export default function AdminDashboard() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {statsData.map((stat) => (
-            <StatsCard
-              key={stat.id}
-              title={stat.title}
-              value={stat.value}
-              icon={stat.icon}
-              color={stat.color}
-            />
-          ))}
+          <StatsCard
+            title={"Total Destinations"}
+            value={stats?.totalDestinations || 0}
+            icon={<FiHome size={24} />}
+            color="blue"
+          />
+          <StatsCard
+            title={"Total Likes"}
+            value={stats?.totalLikes || 0}
+            icon={<FaHeart size={24} />}
+            color="amber"
+          />
+          <StatsCard
+            title={"Total Users"}
+            value={stats?.totalRegisteredUsers || 0}
+            icon={<FiUsers size={24} />}
+            color="green"
+          />
+          <StatsCard
+            title={"Total Hosts"}
+            value={stats?.totalHosts || 0}
+            icon={<FiHome size={24} />}
+            color="blue"
+          />
         </div>
 
         {/* Tabs */}

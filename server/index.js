@@ -92,7 +92,7 @@ async function run() {
       }
     });
 
-    // API route to update user data 
+    // API route to update user data
     app.put("/users/:uid", async (req, res) => {
       const { uid } = req.params;
       const user = req.body;
@@ -329,6 +329,39 @@ async function run() {
         res.status(status).json({
           success: false,
           message: message,
+        });
+      }
+    });
+
+    // API route to get the admin stats
+    app.get("/admin/stats", async (req, res) => {
+      try {
+        const totalDestinations = await spotsCollection.countDocuments();
+        const destinations = await spotsCollection.find({}).toArray();
+        const totalLikes = destinations.reduce(
+          (total, destination) => total + destination.likes,
+          0
+        );
+        const totalRegisteredUsers = await usersCollection.countDocuments();
+        const totalHosts = await usersCollection.countDocuments({
+          role: "Host",
+        });
+        res.status(200).json({
+          success: true,
+          message: "Admin stats fetched successfully!",
+          data: {
+            totalDestinations,
+            totalLikes,
+            totalRegisteredUsers,
+            totalHosts,
+          },
+        });
+      } catch (error) {
+        console.error("Error fetching admin stats:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch admin stats",
+          error: error.message,
         });
       }
     });

@@ -7,7 +7,7 @@ export default function StatsCard({ title, value, icon, color }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-emerald-200 ">
       <div className="flex justify-between items-center">
         <div>
           <p className="text-sm font-medium text-gray-500">{title}</p>
