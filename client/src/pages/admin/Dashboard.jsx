@@ -9,27 +9,6 @@ import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 
-const hostsData = [
-  {
-    id: 1,
-    profileImage: "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "host",
-    status: "active",
-    registeredAt: "2025-07-10T00:00:00Z",
-  },
-  {
-    id: 2,
-    profileImage: "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    role: "host",
-    status: "active",
-    registeredAt: "2025-07-10T00:00:00Z",
-  },
-];
-
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("destinations");
   const axiosCommon = useAxiosCommon();
@@ -58,7 +37,15 @@ export default function AdminDashboard() {
     },
   });
 
-  if (isLoading || destinationsLoading || usersLoading) {
+  const { data: hosts = [], isLoading: hostsLoading } = useQuery({
+    queryKey: ["hosts"],
+    queryFn: async () => {
+      const { data } = await axiosCommon.get("/admin/hosts");
+      return data.data;
+    },
+  });
+
+  if (isLoading || destinationsLoading || usersLoading || hostsLoading) {
     return <LoadingSpinner />;
   }
 
@@ -129,7 +116,7 @@ export default function AdminDashboard() {
             <DestinationDataTable data={destinations} />
           )}
           {activeTab === "users" && <UserDataTable data={users} />}
-          {activeTab === "hosts" && <HostDataTable data={hostsData} />}
+          {activeTab === "hosts" && <HostDataTable data={hosts} />}
         </div>
       </div>
     </div>

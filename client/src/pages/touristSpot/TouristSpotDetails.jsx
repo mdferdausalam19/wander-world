@@ -96,8 +96,7 @@ export default function TouristSpotDetails() {
               <div className="flex items-center text-white/90">
                 <FaMapMarkerAlt className="mr-2" />
                 <span className="text-lg">
-                  {spot.location?.city || spot.city},{" "}
-                  {spot.location?.country || spot.country}
+                  {spot.location?.city}, {spot.location?.country}
                   {spot.continent && ` • ${spot.continent}`}
                 </span>
               </div>
@@ -207,11 +206,11 @@ export default function TouristSpotDetails() {
                   Host Information
                 </h2>
                 <div className="flex items-center gap-4">
-                  <div>
+                  <div className="w-16 h-16">
                     <img
                       src={spot?.author?.avatar}
                       alt="host avatar"
-                      className="w-20 h-20 rounded-full"
+                      className="w-full h-full object-cover rounded-full"
                     />
                   </div>
                   <div>

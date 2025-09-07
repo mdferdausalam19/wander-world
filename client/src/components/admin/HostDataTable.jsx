@@ -1,5 +1,3 @@
-import { FiEdit2, FiTrash2, FiEye } from "react-icons/fi";
-
 export default function HostDataTable({ data }) {
   return (
     <div>
@@ -25,22 +23,22 @@ export default function HostDataTable({ data }) {
                   Role
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Registered At
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Actions
+                  Updated At
                 </th>
+                {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  Host Since
+                </th> */}
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {data.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
+                <tr key={item._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <img
-                      src={"https://i.ibb.co/9H2PJ7h2/d43801412989.jpg"}
+                      src={item.avatar}
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-full"
                     />
@@ -55,47 +53,20 @@ export default function HostDataTable({ data }) {
                     {item.role}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                    <span
-                      className={`px-2 py-1 rounded ${
-                        item.status === "active"
-                          ? "bg-emerald-100 text-emerald-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {item.status}
-                    </span>
+                    {new Date(item.registeredAt).toLocaleDateString()}
+                    <br />
+                    {new Date(item.registeredAt).toLocaleTimeString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                    {new Date(item.registeredAt).toLocaleDateString()}
+                    {new Date(item.updatedAt).toLocaleDateString()}
+                    <br />
+                    {new Date(item.updatedAt).toLocaleTimeString()}
                   </td>
-                  <td
-                    className={`px-6 py-4 whitespace-nowrap text-left text-sm font-medium ${
-                      item.status === "active"
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    <div className="flex space-x-3">
-                      <button
-                        onClick={() => console.log("View", item)}
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        <FiEye className="h-5 w-5" />
-                      </button>
-                      <button
-                        onClick={() => console.log("Edit", item)}
-                        className="text-emerald-600 hover:text-emerald-900"
-                      >
-                        <FiEdit2 className="h-5 w-5" />
-                      </button>
-                      <button
-                        onClick={() => console.log("Delete", item)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        <FiTrash2 className="h-5 w-5" />
-                      </button>
-                    </div>
-                  </td>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                    {new Date(item.hostSince).toLocaleDateString()}
+                    <br />
+                    {new Date(item.hostSince).toLocaleTimeString()}
+                  </td> */}
                 </tr>
               ))}
             </tbody>

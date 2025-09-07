@@ -404,6 +404,25 @@ async function run() {
       }
     });
 
+    // API route to get all hosts
+    app.get("/admin/hosts", async (req, res) => {
+      try {
+        const hosts = await usersCollection.find({ role: "Host" }).toArray();
+        res.status(200).json({
+          success: true,
+          message: "Hosts fetched successfully!",
+          data: hosts,
+        });
+      } catch (error) {
+        console.error("Error fetching hosts:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch hosts",
+          error: error.message,
+        });
+      }
+    });
+
     console.log("Connected to MongoDB successfully!");
   } catch (err) {
     // Log any errors during connection or runtime
