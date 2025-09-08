@@ -126,19 +126,7 @@ export default function MyList() {
 
         {/* Destinations Table */}
         <div className="bg-white rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
-          <MyListTable
-            destinations={spots}
-            onDelete={(id) => {
-              const destination = spots.find((dest) => dest._id === id);
-              handleDeleteClick(destination);
-            }}
-            onEdit={(id) => {
-              const destination = spots.find((dest) => dest._id === id);
-              handleEdit(destination);
-            }}
-          />
-
-          {spots.length === 0 && (
+          {spots.length === 0 ? (
             <div className="p-8 text-center">
               <svg
                 className="mx-auto h-12 w-12 text-gray-400"
@@ -170,6 +158,18 @@ export default function MyList() {
                 </Link>
               </div>
             </div>
+          ) : (
+            <MyListTable
+              destinations={spots}
+              onDelete={(id) => {
+                const destination = spots.find((dest) => dest._id === id);
+                handleDeleteClick(destination);
+              }}
+              onEdit={(id) => {
+                const destination = spots.find((dest) => dest._id === id);
+                handleEdit(destination);
+              }}
+            />
           )}
         </div>
       </div>

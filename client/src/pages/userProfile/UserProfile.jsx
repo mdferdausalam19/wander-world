@@ -4,10 +4,19 @@ import toast from "react-hot-toast";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { TbFidgetSpinner } from "react-icons/tb";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
+import HostModal from "../../components/host/HostModal";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { FiCheckCircle } from "react-icons/fi";
 
 export default function UserProfile() {
+  const [hostModalOpen, setHostModalOpen] = useState(false);
   const { user, updateUserProfile, loading, setLoading } = useAuth();
   const axiosCommon = useAxiosCommon();
+  const queryClient = useQueryClient();
+  const [isHost, setIsHost] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const {
     register,
     handleSubmit,
@@ -33,12 +42,122 @@ export default function UserProfile() {
     }
   };
 
-  if (loading) {
+  const { data: hostRequestData = {}, isLoading: hostRequestLoading } =
+    useQuery({
+      queryKey: ["host-request", user.uid],
+      queryFn: async () => {
+        const { data } = await axiosCommon.get(`/users/${user.uid}`);
+        if (data.data.role === "Host") {
+          setIsHost(true);
+        }
+        if (data.data.isHostRequest === true) {
+          setIsSubmitted(true);
+        }
+        return data.data;
+      },
+    });
+
+  const { mutateAsync: hostRequest } = useMutation({
+    mutationFn: async () => {
+      const { data } = await axiosCommon.put(`/hosts`, {
+        uid: user.uid,
+      });
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["host-request", user.uid],
+      });
+      toast.success("Host request submitted successfully!");
+      setIsSubmitted(true);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const handleHostSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await hostRequest();
+    } catch (error) {
+      console.error("Error submitting host request:", error);
+    } finally {
+      setIsSubmitting(false);
+      setHostModalOpen(false);
+    }
+  };
+
+  const handleHostModalOpen = () => {
+    setHostModalOpen(true);
+  };
+
+  const handleHostModalClose = () => {
+    setHostModalOpen(false);
+  };
+
+  if (loading || hostRequestLoading) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="min-h-screen bg-emerald-100 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Host Section */}
+      <div className="bg-white rounded-2xl shadow-lg p-8 border border-emerald-100 max-w-xl mx-auto mb-10">
+        {!isSubmitted ? (
+          <>
+            <div className="text-center mb-6">
+              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 text-emerald-600 mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-emerald-900 mb-2">
+                Become a WanderWorld Host
+              </h2>
+              <p className="text-emerald-700 max-w-lg mx-auto">
+                Share your unique travel experiences and earn money by hosting
+                travelers in your favorite destinations.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <button
+                onClick={handleHostModalOpen}
+                className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+              >
+                Start Your Hosting Journey
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-8">
+            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 mb-4">
+              <FiCheckCircle className="h-10 w-10 text-emerald-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Application Submitted!
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Thank you for your interest in becoming a host. Our team will
+              review your application and get back to you within 24-48 hours.
+            </p>
+          </div>
+        )}
+      </div>
+      {/* Profile Section */}
       <div className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center border border-emerald-100 max-w-xl mx-auto">
         <img
           src={user?.photoURL || "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg"}
@@ -104,6 +223,15 @@ export default function UserProfile() {
           </button>
         </form>
       </div>
+
+      {hostModalOpen && (
+        <HostModal
+          isOpen={hostModalOpen}
+          isSubmitting={isSubmitting}
+          onClose={handleHostModalClose}
+          onSubmit={handleHostSubmit}
+        />
+      )}
     </div>
   );
 }
