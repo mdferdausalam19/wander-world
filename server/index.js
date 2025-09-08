@@ -362,20 +362,74 @@ async function run() {
           {
             $set: {
               isHostRequest: true,
-              requestedAt: new Date().toISOString(),
+              hostRequestedAt: new Date().toISOString(),
             },
           }
         );
         res.status(200).json({
           success: true,
           message: "Host request processed successfully!",
-          data: result,
         });
       } catch (error) {
         console.error("Error processing host request:", error);
         res.status(500).json({
           success: false,
           message: "Failed to process host request",
+          error: error.message,
+        });
+      }
+    });
+
+    // API route to approve host request
+    app.put("/hosts/approve", async (req, res) => {
+      try {
+        const { uid } = req.body;
+        const result = await usersCollection.updateOne(
+          { uid },
+          {
+            $set: {
+              role: "Host",
+              isHostRequest: false,
+              hostApprovedAt: new Date().toISOString(),
+            },
+          }
+        );
+        res.status(200).json({
+          success: true,
+          message: "Host request approved successfully!",
+        });
+      } catch (error) {
+        console.error("Error approving host request:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to approve host request",
+          error: error.message,
+        });
+      }
+    });
+
+    // API route to reject host request
+    app.put("/hosts/reject", async (req, res) => {
+      try {
+        const { uid } = req.body;
+        const result = await usersCollection.updateOne(
+          { uid },
+          {
+            $set: {
+              isHostRequest: false,
+              hostRejectedAt: new Date().toISOString(),
+            },
+          }
+        );
+        res.status(200).json({
+          success: true,
+          message: "Host request rejected successfully!",
+        });
+      } catch (error) {
+        console.error("Error rejecting host request:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to reject host request",
           error: error.message,
         });
       }
