@@ -52,6 +52,7 @@ export default function SignUp() {
         email: user.email,
         avatar: image || "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
         role: "General",
+        isHostRequest: false,
       };
 
       await axiosCommon.post("/users", userData);

@@ -6,12 +6,13 @@ import { FaHeart } from "react-icons/fa";
 import UserDataTable from "../../components/admin/UserDataTable";
 import HostDataTable from "../../components/admin/HostDataTable";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("destinations");
   const axiosCommon = useAxiosCommon();
+  const queryClient = useQueryClient();
 
   const { data: stats = {}, isLoading } = useQuery({
     queryKey: ["stats"],
@@ -45,7 +46,49 @@ export default function AdminDashboard() {
     },
   });
 
-  if (isLoading || destinationsLoading || usersLoading || hostsLoading) {
+  const { mutateAsync: approveHost, isLoading: approveHostLoading } =
+    useMutation({
+      mutationFn: async (uid) => {
+        const { data } = await axiosCommon.put("/hosts/approve", { uid });
+        return data;
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["users", "hosts", "stats"],
+        });
+      },
+    });
+
+  const { mutateAsync: rejectHost, isLoading: rejectHostLoading } = useMutation(
+    {
+      mutationFn: async (uid) => {
+        const { data } = await axiosCommon.put("/hosts/reject", { uid });
+        return data;
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["users", "hosts", "stats"],
+        });
+      },
+    }
+  );
+
+  const handleApproveHost = async (uid) => {
+    await approveHost(uid);
+  };
+
+  const handleRejectHost = async (uid) => {
+    await rejectHost(uid);
+  };
+
+  if (
+    isLoading ||
+    destinationsLoading ||
+    usersLoading ||
+    hostsLoading ||
+    rejectHostLoading ||
+    approveHostLoading
+  ) {
     return <LoadingSpinner />;
   }
 
@@ -115,7 +158,13 @@ export default function AdminDashboard() {
           {activeTab === "destinations" && (
             <DestinationDataTable data={destinations} />
           )}
-          {activeTab === "users" && <UserDataTable data={users} />}
+          {activeTab === "users" && (
+            <UserDataTable
+              data={users}
+              onApproveHost={handleApproveHost}
+              onRejectHost={handleRejectHost}
+            />
+          )}
           {activeTab === "hosts" && <HostDataTable data={hosts} />}
         </div>
       </div>

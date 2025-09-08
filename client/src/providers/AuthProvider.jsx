@@ -65,6 +65,7 @@ const AuthProvider = ({ children }) => {
       name: user?.displayName,
       avatar: user?.photoURL || "https://i.ibb.co/9H2PJ7h2/d43801412989.jpg",
       role: "General",
+      isHostRequest: false,
     });
     return data;
   };

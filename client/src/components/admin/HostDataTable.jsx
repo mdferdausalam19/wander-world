@@ -1,4 +1,12 @@
 export default function HostDataTable({ data }) {
+  if (data.length === 0) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+        <p className="text-center text-gray-500">No hosts found</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -28,9 +36,9 @@ export default function HostDataTable({ data }) {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Updated At
                 </th>
-                {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Host Since
-                </th> */}
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -62,11 +70,11 @@ export default function HostDataTable({ data }) {
                     <br />
                     {new Date(item.updatedAt).toLocaleTimeString()}
                   </td>
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                    {new Date(item.hostSince).toLocaleDateString()}
+                  <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                    {new Date(item.hostApprovedAt).toLocaleDateString()}
                     <br />
-                    {new Date(item.hostSince).toLocaleTimeString()}
-                  </td> */}
+                    {new Date(item.hostApprovedAt).toLocaleTimeString()}
+                  </td>
                 </tr>
               ))}
             </tbody>

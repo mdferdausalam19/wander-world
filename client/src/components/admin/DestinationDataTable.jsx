@@ -1,6 +1,14 @@
 import { FiTrash2, FiEye } from "react-icons/fi";
 
 export default function DestinationDataTable({ data }) {
+  if (data.length === 0) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+        <p className="text-center text-gray-500">No destinations found</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-6 border-b border-gray-100">
