@@ -92,6 +92,26 @@ async function run() {
       }
     });
 
+    // API route to get an user data by uid
+    app.get("/users/:uid", async (req, res) => {
+      try {
+        const { uid } = req.params;
+        const user = await usersCollection.findOne({ uid: uid });
+        res.status(200).json({
+          success: true,
+          message: "User fetched successfully!",
+          data: user,
+        });
+      } catch (err) {
+        console.error("Error in /users/:uid endpoint:", err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch user data",
+          error: err.message,
+        });
+      }
+    });
+
     // API route to update user data
     app.put("/users/:uid", async (req, res) => {
       const { uid } = req.params;
@@ -329,6 +349,34 @@ async function run() {
         res.status(status).json({
           success: false,
           message: message,
+        });
+      }
+    });
+
+    // API route to submit host request
+    app.put("/hosts", async (req, res) => {
+      try {
+        const { uid } = req.body;
+        const result = await usersCollection.updateOne(
+          { uid },
+          {
+            $set: {
+              isHostRequest: true,
+              requestedAt: new Date().toISOString(),
+            },
+          }
+        );
+        res.status(200).json({
+          success: true,
+          message: "Host request processed successfully!",
+          data: result,
+        });
+      } catch (error) {
+        console.error("Error processing host request:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to process host request",
+          error: error.message,
         });
       }
     });
