@@ -294,6 +294,45 @@ async function run() {
       }
     });
 
+    // API route to like a destination
+    app.patch("/destinations/likes/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const { uid } = req.body;
+
+        const isLiked = await spotsCollection.findOne({
+          _id: new ObjectId(id),
+          likes: uid,
+        });
+
+        if (isLiked) {
+          const result = await spotsCollection.updateOne(
+            { _id: new ObjectId(id) },
+            { $pull: { likes: uid } }
+          );
+          return res.status(200).json({
+            success: true,
+            message: "Destination unliked successfully!",
+          });
+        }
+        const result = await spotsCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $push: { likes: uid } }
+        );
+        res.status(200).json({
+          success: true,
+          message: "Destination liked successfully!",
+        });
+      } catch (err) {
+        console.error("Error in /destinations/likes/:id endpoint:", err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to like destination",
+          error: err.message,
+        });
+      }
+    });
+
     // API route to get weather data
     app.get("/weather", async (req, res) => {
       try {
