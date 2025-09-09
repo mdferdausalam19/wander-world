@@ -109,13 +109,13 @@ export default function UserDataTable({ data, onApproveHost, onRejectHost }) {
                     {item.isHostRequest === true ? (
                       <div className="flex gap-2">
                         <button
-                          className="px-2 py-2 text-xs font-medium rounded-full bg-blue-500 text-white"
+                          className="px-2 py-2 text-xs font-medium rounded-full bg-blue-500 text-white cursor-pointer"
                           onClick={() => onApproveHost(item.uid)}
                         >
                           <FaCheck size={16} />
                         </button>
                         <button
-                          className="px-2 py-2 text-xs font-medium rounded-full bg-red-500 text-white"
+                          className="px-2 py-2 text-xs font-medium rounded-full bg-red-500 text-white cursor-pointer"
                           onClick={() => onRejectHost(item.uid)}
                         >
                           <FaTimes size={16} />

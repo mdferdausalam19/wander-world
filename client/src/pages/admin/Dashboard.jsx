@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FiUsers, FiHome, FiUser } from "react-icons/fi";
+import { FiUsers, FiHome } from "react-icons/fi";
 import StatsCard from "../../components/admin/StatsCard";
 import DestinationDataTable from "../../components/admin/DestinationDataTable";
 import { FaHeart } from "react-icons/fa";
@@ -8,6 +8,7 @@ import HostDataTable from "../../components/admin/HostDataTable";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
+import toast from "react-hot-toast";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("destinations");
@@ -53,9 +54,12 @@ export default function AdminDashboard() {
         return data;
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["users", "hosts", "stats"],
-        });
+        toast.success("Host approved successfully");
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: ["users"] }),
+          queryClient.invalidateQueries({ queryKey: ["hosts"] }),
+          queryClient.invalidateQueries({ queryKey: ["stats"] }),
+        ]);
       },
     });
 
@@ -66,9 +70,12 @@ export default function AdminDashboard() {
         return data;
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["users", "hosts", "stats"],
-        });
+        toast.success("Host rejected successfully");
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: ["users"] }),
+          queryClient.invalidateQueries({ queryKey: ["hosts"] }),
+          queryClient.invalidateQueries({ queryKey: ["stats"] }),
+        ]);
       },
     }
   );
