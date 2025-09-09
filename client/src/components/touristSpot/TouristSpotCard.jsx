@@ -1,4 +1,4 @@
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaHeart, FaMapMarkerAlt } from "react-icons/fa";
 import { Link } from "react-router";
 
 function formatCurrency(amount) {
@@ -46,13 +46,21 @@ export default function TouristSpotCard({ spot }) {
           <span>{formatVisitors(spot.visitorsPerYear)} visitors</span>
         </div>
         <div className="flex flex-wrap gap-2 mt-1">
-          <span
-            className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-              seasonColors[spot.seasonality] || "bg-gray-100 text-gray-500"
-            }`}
-          >
-            {spot.seasonality}
-          </span>
+          <p>
+            <span
+              className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+                seasonColors[spot.seasonality] || "bg-gray-100 text-gray-500"
+              }`}
+            >
+              {spot.seasonality}
+            </span>
+          </p>
+          <span className="mx-1">·</span>
+
+          <p className="flex items-center gap-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">
+            <FaHeart className="text-emerald-500" />
+            <span>{spot.likes.length}</span>
+          </p>
         </div>
         <Link
           to={`/tourist-spot/${spot._id}`}

@@ -52,7 +52,7 @@ export default function SpotForm({
         name: initialData.author?.name || "",
         userId: initialData.author?.userId || "",
       },
-      likes: initialData.likes || 0,
+      likes: initialData.likes?.length || 0,
       createdAt: initialData.createdAt || new Date().toISOString(),
     },
   });

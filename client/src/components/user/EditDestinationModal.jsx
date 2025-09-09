@@ -37,7 +37,7 @@ export default function EditDestinationModal({
       email: destination.author?.email || "",
       avatar: destination.author?.avatar || "",
     },
-    likes: destination.likes || 0,
+    likes: destination.likes?.length || 0,
     createdAt: destination.createdAt || new Date().toISOString(),
   };
 

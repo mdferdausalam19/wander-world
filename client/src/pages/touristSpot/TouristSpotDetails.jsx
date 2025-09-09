@@ -8,7 +8,10 @@ import {
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import WeatherWidget from "../../components/weather/WeatherWidget";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
+import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
 const formatTravelTime = (travelTime) => {
   if (!travelTime) return "N/A";
@@ -27,19 +30,48 @@ const formatTravelTime = (travelTime) => {
 export default function TouristSpotDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const axiosCommon = useAxiosCommon();
+  const { user } = useAuth();
+  const [likeStatus, setLikeStatus] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: spot = {}, isLoading } = useQuery({
     queryKey: ["spot", id],
     enabled: !!id,
     queryFn: async () => {
       const { data } = await axiosCommon.get(`/destinations/${id}`);
+      setLikeStatus(data.data.likes.includes(user?.uid));
       return data.data;
     },
   });
 
-  if (isLoading) {
+  const { mutateAsync: likeSpot, isLoading: isLikeLoading } = useMutation({
+    mutationFn: async () => {
+      const { data } = await axiosCommon.patch(`/destinations/likes/${id}`, {
+        uid: user?.uid,
+      });
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["spot", id] });
+      if (data.success) {
+        toast.success(data.message);
+      }
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || error.message);
+    },
+  });
+
+  const handleLikeSpot = async () => {
+    try {
+      await likeSpot();
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  if (isLoading || isLikeLoading) {
     return <LoadingSpinner />;
   }
 
@@ -143,7 +175,7 @@ export default function TouristSpotDetails() {
                   <p className="text-sm text-gray-500">Total Likes</p>
                   <p className="flex items-center mt-1">
                     <FaHeart className="text-xl text-emerald-500 mr-2" />
-                    <span className="font-medium">{spot.likes}</span>
+                    <span className="font-medium">{spot.likes?.length}</span>
                   </p>
                 </div>
               </div>
@@ -183,15 +215,16 @@ export default function TouristSpotDetails() {
                 )}
                 <div className="flex items-center justify-start mt-6 border-t border-gray-100 pt-6">
                   <button
+                    onClick={handleLikeSpot}
                     className="flex items-center px-4 py-2 border border-emerald-500 
                     bg-emerald-100 text-emerald-900 rounded-lg hover:bg-emerald-50 hover:text-emerald-600 transition-colors cursor-pointer "
                   >
-                    {spot.likes ? (
+                    {likeStatus ? (
                       <FaHeart className="mr-2 text-emerald-900" />
                     ) : (
                       <FaHeart className="mr-2 text-emerald-400" />
                     )}
-                    <span>{spot.likes}</span>
+                    <span>{likeStatus ? "Liked" : "Like"}</span>
                   </button>
                 </div>
               </div>
