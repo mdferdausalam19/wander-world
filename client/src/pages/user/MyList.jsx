@@ -90,7 +90,10 @@ export default function MyList() {
 
   // Calculate user stats
   const totalDestinations = spots.length;
-  const totalLikes = spots.reduce((sum, dest) => sum + (dest.likes || 0), 0);
+  const totalLikes = spots.reduce(
+    (sum, dest) => sum + (dest.likes ? dest.likes.length : 0),
+    0
+  );
 
   if (spotsLoading) {
     return <LoadingSpinner />;
