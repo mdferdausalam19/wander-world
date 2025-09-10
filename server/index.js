@@ -480,7 +480,8 @@ async function run() {
         const totalDestinations = await spotsCollection.countDocuments();
         const destinations = await spotsCollection.find({}).toArray();
         const totalLikes = destinations.reduce(
-          (total, destination) => total + destination.likes,
+          (total, destination) =>
+            total + (destination.likes ? destination.likes.length : 0),
           0
         );
         const totalRegisteredUsers = await usersCollection.countDocuments();

@@ -8,6 +8,8 @@ import HostModal from "../../components/host/HostModal";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FiCheckCircle } from "react-icons/fi";
+import { Link } from "react-router";
+import { BsStars } from "react-icons/bs";
 
 export default function UserProfile() {
   const [hostModalOpen, setHostModalOpen] = useState(false);
@@ -42,6 +44,7 @@ export default function UserProfile() {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const { data: hostRequestData = {}, isLoading: hostRequestLoading } =
     useQuery({
       queryKey: ["host-request", user.uid],
@@ -105,55 +108,75 @@ export default function UserProfile() {
     <div className="min-h-screen bg-emerald-100 py-12 px-4 sm:px-6 lg:px-8">
       {/* Host Section */}
       <div className="bg-white rounded-2xl shadow-lg p-8 border border-emerald-100 max-w-xl mx-auto mb-10">
-        {!isSubmitted ? (
+        {!isHost ? (
           <>
-            <div className="text-center mb-6">
-              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 text-emerald-600 mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                  />
-                </svg>
+            {isSubmitted ? (
+              <div className="text-center py-8">
+                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 mb-4">
+                  <FiCheckCircle className="h-10 w-10 text-emerald-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Application Submitted!
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Thank you for your interest in becoming a host. Our team will
+                  review your application and get back to you within 24-48
+                  hours.
+                </p>
               </div>
-              <h2 className="text-2xl font-bold text-emerald-900 mb-2">
-                Become a WanderWorld Host
-              </h2>
-              <p className="text-emerald-700 max-w-lg mx-auto">
-                Share your unique travel experiences and earn money by hosting
-                travelers in your favorite destinations.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <button
-                onClick={handleHostModalOpen}
-                className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
-              >
-                Start Your Hosting Journey
-              </button>
-            </div>
+            ) : (
+              <>
+                <div className="text-center mb-6">
+                  <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 text-emerald-600 mb-4">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-8 w-8"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                      />
+                    </svg>
+                  </div>
+                  <h2 className="text-2xl font-bold text-emerald-900 mb-2">
+                    Become a WanderWorld Host
+                  </h2>
+                  <p className="text-emerald-700 max-w-lg mx-auto">
+                    Share your unique travel experiences and earn money by
+                    hosting travelers in your favorite destinations.
+                  </p>
+                </div>
+                <div className="text-center">
+                  <button
+                    onClick={handleHostModalOpen}
+                    className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                  >
+                    Start Your Hosting Journey
+                  </button>
+                </div>
+              </>
+            )}
           </>
         ) : (
-          <div className="text-center py-8">
-            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 mb-4">
-              <FiCheckCircle className="h-10 w-10 text-emerald-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Application Submitted!
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Thank you for your interest in becoming a host. Our team will
-              review your application and get back to you within 24-48 hours.
+          <div className="flex flex-col items-center justify-center">
+            <BsStars className="text-yellow-500 text-6xl mb-6 animate-pulse transition-all duration-300" />
+            <p className="text-emerald-600 font-semibold text-2xl mb-6">
+              Congratulations! You are a host now.
             </p>
+            <p className="text-emerald-600 font-semibold text-xl mb-6 text-center">
+              You can add your destination to the platform.
+            </p>
+            <Link
+              to="/add-tourist-spot"
+              className="bg-emerald-500 text-white rounded-xl px-6 py-2 font-semibold shadow hover:bg-emerald-600 transition-colors text-sm cursor-pointer hover:shadow-md text-center"
+            >
+              Add Destination
+            </Link>
           </div>
         )}
       </div>
