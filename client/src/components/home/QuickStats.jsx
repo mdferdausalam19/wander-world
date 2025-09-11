@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 export default function QuickStats() {
   const stats = {
     destinations: 28,
@@ -136,7 +138,9 @@ export default function QuickStats() {
           <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1">
             {stats.travelers}K
           </div>
-          <div className="text-gray-500 text-sm font-medium mb-2">Active Travelers</div>
+          <div className="text-gray-500 text-sm font-medium mb-2">
+            Active Travelers
+          </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-green-600 text-sm font-semibold">
@@ -168,7 +172,9 @@ export default function QuickStats() {
           <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1">
             {stats.recentAdditions}
           </div>
-          <div className="text-gray-500 text-sm font-medium mb-2">New This Week</div>
+          <div className="text-gray-500 text-sm font-medium mb-2">
+            New This Week
+          </div>
           <div className="bg-orange-50 text-orange-700 text-xs font-semibold px-3 py-1 rounded-lg">
             🔥 Trending destination
           </div>
@@ -186,12 +192,18 @@ export default function QuickStats() {
             discovering new places every day
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <button className="bg-white text-emerald-600 px-8 py-3 rounded-xl font-bold hover:bg-emerald-50 transition-colors duration-200 shadow-lg">
+            <Link
+              to="/sign-up"
+              className="bg-white text-emerald-600 px-8 py-3 rounded-xl font-bold hover:bg-emerald-50 transition-colors duration-200 shadow-lg"
+            >
               Create Account
-            </button>
-            <button className="border-2 border-white text-white px-8 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors duration-200">
+            </Link>
+            <Link
+              to="/all-tourist-spots"
+              className="border-2 border-white text-white px-8 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors duration-200"
+            >
               Browse Destinations
-            </button>
+            </Link>
           </div>
         </div>
       </div>

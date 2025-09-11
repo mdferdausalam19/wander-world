@@ -1,10 +1,5 @@
 import { useParams, useNavigate } from "react-router";
-import {
-  FaMapMarkerAlt,
-  FaArrowLeft,
-  FaHeart,
-  FaRegHeart,
-} from "react-icons/fa";
+import { FaMapMarkerAlt, FaArrowLeft, FaHeart } from "react-icons/fa";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import WeatherWidget from "../../components/weather/WeatherWidget";
 import useAxiosCommon from "../../hooks/useAxiosCommon";

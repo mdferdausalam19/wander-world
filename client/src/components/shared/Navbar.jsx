@@ -3,11 +3,15 @@ import { Link, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { FaUser, FaSignOutAlt, FaPlus, FaListAlt } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
+import useRole from "../../hooks/useRole";
 
 export default function Navbar() {
   const { user, signOutUser, loading } = useAuth();
+  const { role } = useRole();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -94,7 +98,10 @@ export default function Navbar() {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
             ) : user ? (
               <div className="relative group">
-                <button className="flex items-center space-x-2 text-emerald-700 hover:text-emerald-600 focus:outline-none rounded-full">
+                <button
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  className="flex items-center space-x-2 text-emerald-700 hover:text-emerald-600 focus:outline-none rounded-full cursor-pointer"
+                >
                   <img
                     src={
                       user.photoURL ||
@@ -108,39 +115,58 @@ export default function Navbar() {
                     {user.displayName || "User"}
                   </span>
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-emerald-100 rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                  <div className="py-1">
-                    <Link
-                      to="/my-list"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
-                    >
-                      <FaListAlt className="mr-2 text-emerald-600" />
-                      My Travel List
-                    </Link>
-                    <Link
-                      to="/add-tourist-spot"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
-                    >
-                      <FaPlus className="mr-2 text-emerald-600" />
-                      Add Destination
-                    </Link>
-                    <div className="border-t border-emerald-100 my-1"></div>
-                    <Link
-                      to="/user-profile"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
-                    >
-                      <FaUser className="mr-2 text-emerald-600" />
-                      Your Profile
-                    </Link>
-                    <button
-                      onClick={handleSignOut}
-                      className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
-                    >
-                      <FaSignOutAlt className="mr-2 text-emerald-600" />
-                      Sign out
-                    </button>
+                {menuOpen && (
+                  <div
+                    className={`absolute right-0 mt-2 w-48 bg-emerald-100 rounded-md shadow-lg py-1 z-50 opacity-0 invisible ${
+                      menuOpen ? "opacity-100 visible" : ""
+                    } transition-all duration-200`}
+                  >
+                    <div className="py-1 space-y-1">
+                      {role === "Host" && (
+                        <>
+                          <Link
+                            to="/my-list"
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
+                          >
+                            <FaListAlt className="mr-2 text-emerald-600" />
+                            My Travel List
+                          </Link>
+                          <Link
+                            to="/add-tourist-spot"
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
+                          >
+                            <FaPlus className="mr-2 text-emerald-600" />
+                            Add Destination
+                          </Link>
+                        </>
+                      )}
+
+                      {role === "Admin" && (
+                        <Link
+                          to="/admin/dashboard"
+                          className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
+                        >
+                          <MdDashboard className="mr-2 text-emerald-600" />
+                          Dashboard
+                        </Link>
+                      )}
+                      <Link
+                        to="/user-profile"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
+                      >
+                        <FaUser className="mr-2 text-emerald-600" />
+                        Your Profile
+                      </Link>
+                      <button
+                        onClick={handleSignOut}
+                        className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
+                      >
+                        <FaSignOutAlt className="mr-2 text-emerald-600" />
+                        Sign out
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             ) : (
               <>
