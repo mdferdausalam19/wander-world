@@ -15,7 +15,7 @@ import useRole from "../../hooks/useRole";
 export default function UserProfile() {
   const [hostModalOpen, setHostModalOpen] = useState(false);
   const { user, updateUserProfile, loading, setLoading } = useAuth();
-  const { role } = useRole();
+  const { role, isLoading: roleLoading } = useRole();
   const axiosCommon = useAxiosCommon();
   const queryClient = useQueryClient();
   const [isHost, setIsHost] = useState(false);
@@ -102,7 +102,7 @@ export default function UserProfile() {
     setHostModalOpen(false);
   };
 
-  if (loading || hostRequestLoading) {
+  if (loading || hostRequestLoading || roleLoading) {
     return <LoadingSpinner />;
   }
 

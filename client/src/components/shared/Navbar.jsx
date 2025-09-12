@@ -8,7 +8,7 @@ import useRole from "../../hooks/useRole";
 
 export default function Navbar() {
   const { user, signOutUser, loading } = useAuth();
-  const { role } = useRole();
+  const { role, isLoading: roleLoading } = useRole();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -94,7 +94,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            {loading ? (
+            {loading || roleLoading ? (
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
             ) : user ? (
               <div className="relative group">
@@ -205,7 +205,7 @@ export default function Navbar() {
                     All Tourist Spots
                   </Link>
                 )}
-                {!loading && user && (
+                {(!loading || roleLoading) && user && (
                   <>
                     <div className="flex items-center space-x-3 pt-4 border-t border-gray-200 px-4">
                       <img
@@ -264,7 +264,7 @@ export default function Navbar() {
                     </button>
                   </>
                 )}
-                {!loading && !user && (
+                {(!loading || roleLoading) && !user && (
                   <>
                     <Link
                       to="/sign-in"
