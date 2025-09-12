@@ -27,6 +27,9 @@ async function run() {
     const database = client.db("wander-world");
     const usersCollection = database.collection("users");
     const spotsCollection = database.collection("spots");
+    const newsletterSubscribersCollection = database.collection(
+      "newsletterSubscribers"
+    );
 
     // API route to save user data
     app.post("/users", async (req, res) => {
@@ -474,6 +477,35 @@ async function run() {
       }
     });
 
+    // API route to add a new subscriber
+    app.post("/newsletter/subscribe", async (req, res) => {
+      try {
+        const { email } = req.body;
+
+        const existingSubscriber =
+          await newsletterSubscribersCollection.findOne({ email });
+        if (existingSubscriber) {
+          return res
+            .status(200)
+            .json({ success: false, message: "Already subscribed" });
+        }
+
+        const result = await newsletterSubscribersCollection.insertOne({
+          email,
+          subscribedAt: new Date().toISOString(),
+        });
+
+        res.status(201).json({
+          success: true,
+          message: "Subscribed successfully!",
+          subscriber: result.insertedId,
+        });
+      } catch (error) {
+        console.error("Error subscribing to newsletter:", error);
+        res.status(500).json({ error: "Failed to subscribe" });
+      }
+    });
+
     // API route to get the admin stats
     app.get("/admin/stats", async (req, res) => {
       try {
@@ -560,6 +592,27 @@ async function run() {
         res.status(500).json({
           success: false,
           message: "Failed to fetch hosts",
+          error: error.message,
+        });
+      }
+    });
+
+    // API route to get all newsletter subscribers
+    app.get("/admin/newsletter", async (req, res) => {
+      try {
+        const subscribers = await newsletterSubscribersCollection
+          .find({})
+          .toArray();
+        res.status(200).json({
+          success: true,
+          message: "Subscribers fetched successfully!",
+          data: subscribers,
+        });
+      } catch (error) {
+        console.error("Error fetching subscribers:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch subscribers",
           error: error.message,
         });
       }
