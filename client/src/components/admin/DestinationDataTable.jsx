@@ -1,6 +1,7 @@
 import { FiTrash2, FiEye } from "react-icons/fi";
+import { Link } from "react-router";
 
-export default function DestinationDataTable({ data }) {
+export default function DestinationDataTable({ data, onDelete }) {
   if (data.length === 0) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
@@ -81,15 +82,15 @@ export default function DestinationDataTable({ data }) {
 
                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                   <div className="flex space-x-3">
-                    <button
-                      onClick={() => console.log("View", item)}
+                    <Link
+                      to={`/tourist-spot/${item._id}`}
                       className="text-blue-600 hover:text-blue-900"
                     >
                       <FiEye className="h-5 w-5" />
-                    </button>
+                    </Link>
                     <button
-                      onClick={() => console.log("Delete", item)}
-                      className="text-red-600 hover:text-red-900"
+                      onClick={() => onDelete(item._id)}
+                      className="text-red-600 hover:text-red-900 cursor-pointer"
                     >
                       <FiTrash2 className="h-5 w-5" />
                     </button>

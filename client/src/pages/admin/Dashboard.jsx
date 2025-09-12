@@ -10,9 +10,12 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import toast from "react-hot-toast";
 import SubscriberDataTable from "../../components/admin/SubscriberDataTable";
+import DeleteDestinationModal from "../../components/user/DeleteDestinationModal";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("destinations");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState(null);
   const axiosCommon = useAxiosCommon();
   const queryClient = useQueryClient();
 
@@ -89,12 +92,39 @@ export default function AdminDashboard() {
     }
   );
 
+  const {
+    mutateAsync: deleteDestination,
+    isLoading: deleteDestinationLoading,
+  } = useMutation({
+    mutationFn: async (id) => {
+      const { data } = await axiosCommon.delete(`/destinations/${id}`);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Destination deleted successfully");
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["destinations"] }),
+        queryClient.invalidateQueries({ queryKey: ["stats"] }),
+      ]);
+    },
+  });
+
   const handleApproveHost = async (uid) => {
     await approveHost(uid);
   };
 
   const handleRejectHost = async (uid) => {
     await rejectHost(uid);
+  };
+
+  const handleDeleteClick = (destination) => {
+    setSelectedDestination(destination);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    await deleteDestination(selectedDestination._id);
+    setShowDeleteModal(false);
   };
 
   if (
@@ -104,7 +134,8 @@ export default function AdminDashboard() {
     hostsLoading ||
     subscribersLoading ||
     rejectHostLoading ||
-    approveHostLoading
+    approveHostLoading ||
+    deleteDestinationLoading
   ) {
     return <LoadingSpinner />;
   }
@@ -174,7 +205,15 @@ export default function AdminDashboard() {
         {/* Tab Content */}
         <div className="space-y-8">
           {activeTab === "destinations" && (
-            <DestinationDataTable data={destinations} />
+            <DestinationDataTable
+              onDelete={(id) => {
+                const destination = destinations.find(
+                  (dest) => dest._id === id
+                );
+                handleDeleteClick(destination);
+              }}
+              data={destinations}
+            />
           )}
           {activeTab === "users" && (
             <UserDataTable
@@ -189,6 +228,14 @@ export default function AdminDashboard() {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteDestinationModal
+        open={showDeleteModal}
+        destination={selectedDestination}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setShowDeleteModal(false)}
+      />
     </div>
   );
 }
