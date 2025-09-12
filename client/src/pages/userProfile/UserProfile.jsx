@@ -109,7 +109,7 @@ export default function UserProfile() {
   return (
     <div className="min-h-screen bg-emerald-100 py-12 px-4 sm:px-6 lg:px-8">
       {/* Host Section */}
-      {!role === "Admin" && (
+      {role !== "Admin" && (
         <div className="bg-white rounded-2xl shadow-lg p-8 border border-emerald-100 max-w-xl mx-auto mb-10">
           {!isHost ? (
             <>
