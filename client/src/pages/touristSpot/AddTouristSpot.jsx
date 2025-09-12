@@ -18,7 +18,7 @@ export default function AddTouristSpot() {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);
-        navigate("/all-tourist-spots");
+        navigate("/my-list");
       }
     },
     onError: (error) => {
@@ -29,7 +29,7 @@ export default function AddTouristSpot() {
   const handleAddSpot = async (spotData) => {
     const spotInfo = {
       ...spotData,
-      likes: 0,
+      likes: [],
       createdAt: new Date().toISOString(),
       author: {
         uid: user?.uid,

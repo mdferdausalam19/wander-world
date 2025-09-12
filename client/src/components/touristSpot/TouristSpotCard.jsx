@@ -27,7 +27,7 @@ export default function TouristSpotCard({ spot }) {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>
-      <div className="flex-1 flex flex-col p-4 gap-2">
+      <div className="flex-1 flex flex-col p-4 gap-1">
         <div className="flex items-center gap-2 mb-1">
           <FaMapMarkerAlt className="text-emerald-400" />
           <span className="font-semibold text-gray-800 text-sm truncate">

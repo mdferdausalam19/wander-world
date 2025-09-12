@@ -103,7 +103,7 @@ export default function SignUp() {
                   className="appearance-none block w-full px-3 py-2 border border-emerald-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors duration-200"
                 />
                 {errors.fullName && (
-                  <p className="mt-2 text-sm text-emerald-600">
+                  <p className="mt-2 text-sm text-red-500">
                     {errors.fullName.message}
                   </p>
                 )}
@@ -132,7 +132,7 @@ export default function SignUp() {
                   className="appearance-none block w-full px-3 py-2 border border-emerald-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors duration-200"
                 />
                 {errors.email && (
-                  <p className="mt-2 text-sm text-emerald-600">
+                  <p className="mt-2 text-sm text-red-500">
                     {errors.email.message}
                   </p>
                 )}
@@ -186,7 +186,7 @@ export default function SignUp() {
                   )}
                 </button>
                 {errors.password && (
-                  <p className="mt-2 text-sm text-emerald-600">
+                  <p className="mt-2 text-sm text-red-500">
                     {errors.password.message}
                   </p>
                 )}
