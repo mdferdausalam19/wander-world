@@ -82,8 +82,8 @@ export default function SignUp() {
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow-lg rounded-lg sm:px-10 border border-emerald-100">
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0">
+        <div className="bg-white py-8 px-5 lg:px-8 shadow-lg rounded-lg sm:px-10 border border-emerald-100">
           <form onSubmit={handleSubmit(handleSingUp)} className="space-y-6">
             <div>
               <label

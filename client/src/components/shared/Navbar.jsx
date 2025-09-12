@@ -220,20 +220,33 @@ export default function Navbar() {
                         {user.displayName || "User"}
                       </span>
                     </div>
-                    <Link
-                      to="/my-list"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
-                    >
-                      <FaListAlt className="mr-2 text-emerald-600" />
-                      My Travel List
-                    </Link>
-                    <Link
-                      to="/add-tourist-spot"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
-                    >
-                      <FaPlus className="mr-2 text-emerald-600" />
-                      Add Destination
-                    </Link>
+                    {role === "Host" && (
+                      <>
+                        <Link
+                          to="/my-list"
+                          className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
+                        >
+                          <FaListAlt className="mr-2 text-emerald-600" />
+                          My Travel List
+                        </Link>
+                        <Link
+                          to="/add-tourist-spot"
+                          className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
+                        >
+                          <FaPlus className="mr-2 text-emerald-600" />
+                          Add Destination
+                        </Link>
+                      </>
+                    )}
+                    {role === "Admin" && (
+                      <Link
+                        to="/admin/dashboard"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-emerald-200 transition-colors duration-100"
+                      >
+                        <MdDashboard className="mr-2 text-emerald-600" />
+                        Dashboard
+                      </Link>
+                    )}
                     <div className="border-t border-emerald-100 my-1"></div>
                     <Link
                       to="/user-profile"

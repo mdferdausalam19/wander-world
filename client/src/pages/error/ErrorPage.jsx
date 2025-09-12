@@ -30,7 +30,7 @@ export default function ErrorPage() {
           <div className="flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center justify-center w-1/2 px-5 py-1 text-sm text-gray-700 transition-colors duration-200 bg-emerald-100 border rounded-lg gap-x-2 sm:w-auto hover:bg-emerald-200 "
+              className="flex items-center justify-center mx-auto w-1/2 px-5 py-1 text-sm text-gray-700 transition-colors duration-200 bg-emerald-100 border rounded-lg gap-x-2 sm:w-auto hover:bg-emerald-200 "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

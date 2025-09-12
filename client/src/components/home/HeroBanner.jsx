@@ -2,22 +2,22 @@ import { Link } from "react-router";
 
 export default function HeroBanner() {
   return (
-    <div className="relative  w-full flex items-center justify-center pt-24 pb-12 md:pt-0 md:pb-0 bg-gradient-to-t from-emerald-100/50 via-emerald-200 to-emerald-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="relative w-full flex items-center justify-center pt-24 pb-12 md:pt-0 md:pb-0 bg-gradient-to-t from-emerald-100/50 via-emerald-200 to-emerald-300">
+      <div className="max-w-7xl mx-auto">
         {/* Content */}
-        <div className="flex flex-col items-center justify-center text-center overflow-visible py-10 sm:py-20 md:py-30 lg:py-40">
+        <div className="flex flex-col items-center justify-center text-center overflow-visible px-4 sm:px-6 lg:px-8 py-10 sm:py-20 md:py-30 lg:py-40">
           <div className="mb-8 flex items-center justify-center">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black drop-shadow-2xl">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black drop-shadow-2xl">
               Wander<span className="text-emerald-600">World</span>
             </h1>
           </div>
 
           {/* Tagline */}
           <div className="mb-6 space-y-4">
-            <p className="text-2xl md:text-3xl font-semibold mb-3 drop-shadow-lg text-emerald-700">
+            <p className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 drop-shadow-lg text-emerald-700">
               Discover • Share • Explore
             </p>
-            <p className="text-base md:text-lg max-w-2xl md:max-w-4xl mx-auto drop-shadow px-2 font-light mt-6 text-gray-700">
+            <p className="text-base sm:text-lg md:text-xl max-w-2xl md:max-w-4xl mx-auto drop-shadow px-2 font-light mt-6 text-gray-700">
               Your gateway to the world's most incredible destinations. Join our
               global community of travelers and discover hidden gems, share your
               adventures, and plan your next unforgettable journey.

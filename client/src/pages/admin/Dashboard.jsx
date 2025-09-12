@@ -180,7 +180,7 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <div className="mb-6 border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
+          <nav className="-mb-px flex space-x-8 overflow-auto">
             {[
               { id: "destinations", name: "All Destinations" },
               { id: "users", name: "Users" },
