@@ -1,10 +1,33 @@
 import toast from "react-hot-toast";
 import { FaEnvelope } from "react-icons/fa";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useMutation } from "@tanstack/react-query";
 
 export default function Newsletter() {
-  const handleSubmit = (e) => {
+  const axiosCommon = useAxiosCommon();
+
+  const { mutateAsync: subscribe, isLoading } = useMutation({
+    mutationFn: async (email) => {
+      const { data } = await axiosCommon.post("/newsletter/subscribe", {
+        email,
+      });
+      return data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || error.message);
+    },
+  });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success("Subscribed successfully!");
+    await subscribe(e.target.email.value);
     e.target.reset();
   };
 
@@ -35,7 +58,7 @@ export default function Newsletter() {
               type="submit"
               className="px-8 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 whitespace-nowrap"
             >
-              Subscribe
+              {isLoading ? "Subscribing..." : "Subscribe"}
             </button>
           </div>
         </form>

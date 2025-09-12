@@ -9,6 +9,7 @@ import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import toast from "react-hot-toast";
+import SubscriberDataTable from "../../components/admin/SubscriberDataTable";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("destinations");
@@ -43,6 +44,14 @@ export default function AdminDashboard() {
     queryKey: ["hosts"],
     queryFn: async () => {
       const { data } = await axiosCommon.get("/admin/hosts");
+      return data.data;
+    },
+  });
+
+  const { data: subscribers = [], isLoading: subscribersLoading } = useQuery({
+    queryKey: ["subscribers"],
+    queryFn: async () => {
+      const { data } = await axiosCommon.get("/admin/newsletter");
       return data.data;
     },
   });
@@ -93,6 +102,7 @@ export default function AdminDashboard() {
     destinationsLoading ||
     usersLoading ||
     hostsLoading ||
+    subscribersLoading ||
     rejectHostLoading ||
     approveHostLoading
   ) {
@@ -144,6 +154,7 @@ export default function AdminDashboard() {
               { id: "destinations", name: "All Destinations" },
               { id: "users", name: "Users" },
               { id: "hosts", name: "Hosts" },
+              { id: "subscribers", name: "Subscribers" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -173,6 +184,9 @@ export default function AdminDashboard() {
             />
           )}
           {activeTab === "hosts" && <HostDataTable data={hosts} />}
+          {activeTab === "subscribers" && (
+            <SubscriberDataTable data={subscribers} />
+          )}
         </div>
       </div>
     </div>
