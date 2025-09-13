@@ -100,8 +100,8 @@ export default function MyList() {
   }
 
   return (
-    <div className="min-h-screen bg-emerald-100 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-emerald-100">
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>

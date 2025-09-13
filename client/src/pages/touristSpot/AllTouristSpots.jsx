@@ -49,7 +49,7 @@ export default function AllTouristSpots() {
 
   return (
     <div className="min-h-screen bg-emerald-100">
-      <div className="w-full max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-emerald-700 mb-2">
             All Tourist Spots
