@@ -2,13 +2,29 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const app = express();
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 5000;
 const axios = require("axios");
-const jwt = require("jsonwebtoken");
 
 // Middleware setup for CORS and JSON parsing
-app.use(cors());
+
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://wanderworld-app.vercel.app"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
+
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+  maxAge: 24 * 60 * 60 * 1000,
+};
 
 // MongoDB dependencies and client initialization
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
@@ -50,6 +66,36 @@ async function run() {
     const newsletterSubscribersCollection = database.collection(
       "newsletterSubscribers"
     );
+
+    // API route to generate JWT token and set it as a cookie
+    app.post("/jwt", async (req, res) => {
+      try {
+        const user = req.body;
+        const query = { uid: user.uid };
+        const existingUser = await usersCollection.findOne(query);
+        if (!existingUser) {
+          return res.status(401).json({
+            message: "Invalid user.",
+          });
+        }
+        const token = jwt.sign(
+          { uid: existingUser.uid },
+          process.env.ACCESS_TOKEN_SECRET,
+          {
+            expiresIn: "1d",
+          }
+        );
+        res.cookie("token", token, cookieOptions);
+        res.status(200).json({
+          message: "Sign in successful!",
+        });
+      } catch (err) {
+        console.error("Error logging in: ", err.message);
+        res.status(500).json({
+          message: "Failed to sign in.",
+        });
+      }
+    });
 
     // API route to save user data
     app.post("/users", async (req, res) => {
