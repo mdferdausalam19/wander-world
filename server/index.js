@@ -4,6 +4,7 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
 const axios = require("axios");
+const jwt = require("jsonwebtoken");
 
 // Middleware setup for CORS and JSON parsing
 app.use(cors());
@@ -21,6 +22,25 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
+
+// Middleware to verify JWT token and decode user information
+const verifyToken = (req, res, next) => {
+  const token = req.cookies?.token;
+
+  if (!token) {
+    return res.status(401).json({ message: "unauthorized access!" });
+  }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      console.error("JWT Verification Error:", err.message);
+      return res.status(403).json({ message: "forbidden access!" });
+    }
+
+    req.user = decoded;
+    next();
+  });
+};
 
 async function run() {
   try {
