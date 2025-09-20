@@ -67,6 +67,30 @@ async function run() {
       "newsletterSubscribers"
     );
 
+    // Middleware to verify user role
+    const verifyUserRole = (...allowedRoles) => {
+      return async (req, res, next) => {
+        try {
+          const uid = req.user?.uid;
+          if (!uid) {
+            return res.status(401).json({ message: "unauthorized access!" });
+          }
+
+          const user = await usersCollection.findOne({ uid });
+          if (!user || !allowedRoles.includes(user.role)) {
+            return res.status(403).json({ message: "forbidden access!" });
+          }
+
+          next();
+        } catch (err) {
+          console.error("Error in verifyUserRole middleware:", err.message);
+          res
+            .status(500)
+            .json({ message: "server error while verifying role." });
+        }
+      };
+    };
+
     // API route to generate JWT token and set it as a cookie
     app.post("/jwt", async (req, res) => {
       try {
