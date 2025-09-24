@@ -51,10 +51,29 @@ const AuthProvider = ({ children }) => {
   };
 
   // sign out the user
-  const signOutUser = () => {
+  const signOutUser = async () => {
     setUser(null);
     setLoading(true);
+    await axios.post(
+      `${import.meta.env.VITE_API_URL}/sign-out`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
     return signOut(auth);
+  };
+
+  // get token from server
+  const getToken = async (uid) => {
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/jwt`,
+      { uid },
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
   };
 
   // save user in database
@@ -75,8 +94,11 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           await saveUser(currentUser);
+          await getToken(currentUser.uid);
         } catch (err) {
           console.error("Error saving user: ", err.message);
+          await signOutUser();
+          return;
         }
       }
       setUser(currentUser || null);
