@@ -70,6 +70,10 @@ export default function WeatherWidget({ location = "" }) {
             <h3 className="text-sm font-medium text-gray-500">
               Current Weather
             </h3>
+            <h3 className="text-xs text-gray-400">
+              Last Updated at{" "}
+              {new Date(weather?.date_time * 1000).toLocaleTimeString()}
+            </h3>
           </div>
         </div>
 
@@ -90,6 +94,8 @@ export default function WeatherWidget({ location = "" }) {
         </div>
 
         <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-2 text-xs">
+          <div className="text-gray-600">Feels Like</div>
+          <div className="text-right font-medium">{weather?.feels_like}°</div>
           <div className="text-gray-600">Humidity</div>
           <div className="text-right font-medium">{weather?.humidity}%</div>
 

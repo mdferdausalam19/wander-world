@@ -483,8 +483,12 @@ async function run() {
           description: response?.data?.weather?.[0]?.description,
           humidity: response?.data?.main?.humidity,
           wind_speed: Math.round(response?.data?.wind?.speed * 3.6),
+          timezone: response?.data?.timezone,
+          date_time: response?.data?.dt,
           city: response?.data?.name,
           country: response?.data?.sys?.country,
+          sunrise: response?.data?.sys?.sunrise,
+          sunset: response?.data?.sys?.sunset,
         };
 
         res.json({
