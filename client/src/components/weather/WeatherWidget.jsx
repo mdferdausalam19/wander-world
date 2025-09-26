@@ -7,7 +7,7 @@ import {
   WiFog,
 } from "react-icons/wi";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const getWeatherIcon = (condition = "") => {
   const conditionLower = condition.toLowerCase();
@@ -28,7 +28,7 @@ const getWeatherIcon = (condition = "") => {
 };
 
 export default function WeatherWidget({ location = "" }) {
-  const axiosCommon = useAxiosCommon();
+  const axiosSecure = useAxiosSecure();
   const {
     data: weather = {},
     isLoading,
@@ -37,7 +37,7 @@ export default function WeatherWidget({ location = "" }) {
     queryKey: ["weather", location],
     enabled: !!location,
     queryFn: async () => {
-      const { data } = await axiosCommon.get(
+      const { data } = await axiosSecure.get(
         `/weather?city=${location?.city}&lat=${location?.coordinates?.lat}&lon=${location?.coordinates?.lng}`
       );
       return data.data;

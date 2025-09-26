@@ -204,66 +204,76 @@ async function run() {
     });
 
     // API route to get an user data by uid
-    app.get("/users/:uid", async (req, res) => {
-      try {
-        const { uid } = req.params;
-        const user = await usersCollection.findOne({ uid: uid });
-        res.status(200).json({
-          success: true,
-          message: "User fetched successfully!",
-          data: user,
-        });
-      } catch (err) {
-        console.error("Error in /users/:uid endpoint:", err);
-        res.status(500).json({
-          success: false,
-          message: "Failed to fetch user data",
-          error: err.message,
-        });
-      }
-    });
-
-    // API route to update user data
-    app.put("/users/:uid", async (req, res) => {
-      const { uid } = req.params;
-      const user = req.body;
-      try {
-        const query = { uid: uid };
-
-        // Find the user by uid
-        const existingUser = await usersCollection.findOne(query);
-
-        if (!existingUser) {
-          return res.status(404).json({
+    app.get(
+      "/users/:uid",
+      verifyToken,
+      verifyUserRole("General", "Host", "Admin"),
+      async (req, res) => {
+        try {
+          const { uid } = req.params;
+          const user = await usersCollection.findOne({ uid: uid });
+          res.status(200).json({
+            success: true,
+            message: "User fetched successfully!",
+            data: user,
+          });
+        } catch (err) {
+          console.error("Error in /users/:uid endpoint:", err);
+          res.status(500).json({
             success: false,
-            message: "User not found",
+            message: "Failed to fetch user data",
+            error: err.message,
           });
         }
-
-        // Update the user in the users collection
-        const userUpdateResult = await usersCollection.updateOne(query, {
-          $set: { ...user, updatedAt: new Date().toISOString() },
-        });
-
-        // Update the author of all spots created by the user in the spots collection
-        const spotsUpdateResult = await spotsCollection.updateMany(
-          { "author.uid": uid },
-          { $set: { "author.name": user.name, "author.avatar": user.avatar } }
-        );
-
-        res.status(200).json({
-          success: true,
-          message: "User updated successfully!",
-        });
-      } catch (err) {
-        console.error("Error in /users/:uid endpoint:", err);
-        res.status(500).json({
-          success: false,
-          message: "Failed to update user",
-          error: err.message,
-        });
       }
-    });
+    );
+
+    // API route to update user data
+    app.put(
+      "/users/:uid",
+      verifyToken,
+      verifyUserRole("General", "Host", "Admin"),
+      async (req, res) => {
+        const { uid } = req.params;
+        const user = req.body;
+        try {
+          const query = { uid: uid };
+
+          // Find the user by uid
+          const existingUser = await usersCollection.findOne(query);
+
+          if (!existingUser) {
+            return res.status(404).json({
+              success: false,
+              message: "User not found",
+            });
+          }
+
+          // Update the user in the users collection
+          const userUpdateResult = await usersCollection.updateOne(query, {
+            $set: { ...user, updatedAt: new Date().toISOString() },
+          });
+
+          // Update the author of all spots created by the user in the spots collection
+          const spotsUpdateResult = await spotsCollection.updateMany(
+            { "author.uid": uid },
+            { $set: { "author.name": user.name, "author.avatar": user.avatar } }
+          );
+
+          res.status(200).json({
+            success: true,
+            message: "User updated successfully!",
+          });
+        } catch (err) {
+          console.error("Error in /users/:uid endpoint:", err);
+          res.status(500).json({
+            success: false,
+            message: "Failed to update user",
+            error: err.message,
+          });
+        }
+      }
+    );
 
     // API route to get all destinations
     app.get("/destinations", async (req, res) => {
@@ -285,309 +295,359 @@ async function run() {
     });
 
     // API route to get a destination by ID
-    app.get("/destinations/:id", async (req, res) => {
-      try {
-        const { id } = req.params;
-        const destination = await spotsCollection.findOne({
-          _id: new ObjectId(id),
-        });
-        res.status(200).json({
-          success: true,
-          message: "Destination fetched successfully!",
-          data: destination,
-        });
-      } catch (err) {
-        console.error("Error in /destinations/:id endpoint:", err);
-        res.status(500).json({
-          success: false,
-          message: "Failed to fetch destination",
-          error: err.message,
-        });
+    app.get(
+      "/destinations/:id",
+      verifyToken,
+      verifyUserRole("General", "Host", "Admin"),
+      async (req, res) => {
+        try {
+          const { id } = req.params;
+          const destination = await spotsCollection.findOne({
+            _id: new ObjectId(id),
+          });
+          res.status(200).json({
+            success: true,
+            message: "Destination fetched successfully!",
+            data: destination,
+          });
+        } catch (err) {
+          console.error("Error in /destinations/:id endpoint:", err);
+          res.status(500).json({
+            success: false,
+            message: "Failed to fetch destination",
+            error: err.message,
+          });
+        }
       }
-    });
+    );
 
     // API route to get all destination for a specific user
-    app.get("/destinations/user/:uid", async (req, res) => {
-      try {
-        const { uid } = req.params;
-        const destinations = await spotsCollection
-          .find({ "author.uid": uid })
-          .toArray();
-        res.status(200).json({
-          success: true,
-          message: "Destinations fetched successfully!",
-          data: destinations,
-        });
-      } catch (err) {
-        console.error("Error in /destinations/:uid endpoint:", err);
-        res.status(500).json({
-          success: false,
-          message: "Failed to fetch destinations",
-          error: err.message,
-        });
+    app.get(
+      "/destinations/user/:uid",
+      verifyToken,
+      verifyUserRole("Host"),
+      async (req, res) => {
+        try {
+          const { uid } = req.params;
+          const destinations = await spotsCollection
+            .find({ "author.uid": uid })
+            .toArray();
+          res.status(200).json({
+            success: true,
+            message: "Destinations fetched successfully!",
+            data: destinations,
+          });
+        } catch (err) {
+          console.error("Error in /destinations/:uid endpoint:", err);
+          res.status(500).json({
+            success: false,
+            message: "Failed to fetch destinations",
+            error: err.message,
+          });
+        }
       }
-    });
+    );
 
     // API route to add a destination
-    app.post("/destinations", async (req, res) => {
-      try {
-        const destination = req.body;
+    app.post(
+      "/destinations",
+      verifyToken,
+      verifyUserRole("Host"),
+      async (req, res) => {
+        try {
+          const destination = req.body;
 
-        if (
-          !destination.name ||
-          !destination.imageUrl ||
-          !destination.location
-        ) {
-          return res.status(400).json({
+          if (
+            !destination.name ||
+            !destination.imageUrl ||
+            !destination.location
+          ) {
+            return res.status(400).json({
+              success: false,
+              message:
+                "Missing required fields: name, image, and location are required",
+            });
+          }
+
+          const result = await spotsCollection.insertOne(destination);
+
+          res.status(201).json({
+            success: true,
+            message: "Destination added successfully!",
+          });
+        } catch (err) {
+          console.error("Error in /destinations endpoint:", err);
+          res.status(500).json({
             success: false,
-            message:
-              "Missing required fields: name, image, and location are required",
+            message: "Failed to process destination data",
+            error: err.message,
           });
         }
-
-        const result = await spotsCollection.insertOne(destination);
-
-        res.status(201).json({
-          success: true,
-          message: "Destination added successfully!",
-        });
-      } catch (err) {
-        console.error("Error in /destinations endpoint:", err);
-        res.status(500).json({
-          success: false,
-          message: "Failed to process destination data",
-          error: err.message,
-        });
       }
-    });
+    );
 
     // API route to update a destination
-    app.put("/destinations/:id", async (req, res) => {
-      try {
-        const { id } = req.params;
-        const destination = req.body;
-        const result = await spotsCollection.updateOne(
-          { _id: new ObjectId(id) },
-          { $set: { ...destination, _id: new ObjectId(destination._id) } }
-        );
-        res.status(200).json({
-          success: true,
-          message: "Destination updated successfully!",
-        });
-      } catch (err) {
-        console.error("Error in /destination/:id endpoint:", err);
-        res.status(500).json({
-          success: false,
-          message: "Failed to update destination",
-          error: err.message,
-        });
-      }
-    });
-
-    // API route to delete a destination
-    app.delete("/destinations/:id", async (req, res) => {
-      try {
-        const { id } = req.params;
-        const result = await spotsCollection.deleteOne({
-          _id: new ObjectId(id),
-        });
-        res.status(200).json({
-          success: true,
-          message: "Destination deleted successfully!",
-        });
-      } catch (err) {
-        console.error("Error in /destination/:id endpoint:", err);
-        res.status(500).json({
-          success: false,
-          message: "Failed to delete destination",
-          error: err.message,
-        });
-      }
-    });
-
-    // API route to like a destination
-    app.patch("/destinations/likes/:id", async (req, res) => {
-      try {
-        const { id } = req.params;
-        const { uid } = req.body;
-
-        const isLiked = await spotsCollection.findOne({
-          _id: new ObjectId(id),
-          likes: uid,
-        });
-
-        if (isLiked) {
+    app.put(
+      "/destinations/:id",
+      verifyToken,
+      verifyUserRole("Host"),
+      async (req, res) => {
+        try {
+          const { id } = req.params;
+          const destination = req.body;
           const result = await spotsCollection.updateOne(
             { _id: new ObjectId(id) },
-            { $pull: { likes: uid } }
+            { $set: { ...destination, _id: new ObjectId(destination._id) } }
           );
-          return res.status(200).json({
+          res.status(200).json({
             success: true,
-            message: "Destination unliked successfully!",
+            message: "Destination updated successfully!",
+          });
+        } catch (err) {
+          console.error("Error in /destination/:id endpoint:", err);
+          res.status(500).json({
+            success: false,
+            message: "Failed to update destination",
+            error: err.message,
           });
         }
-        const result = await spotsCollection.updateOne(
-          { _id: new ObjectId(id) },
-          { $push: { likes: uid } }
-        );
-        res.status(200).json({
-          success: true,
-          message: "Destination liked successfully!",
-        });
-      } catch (err) {
-        console.error("Error in /destinations/likes/:id endpoint:", err);
-        res.status(500).json({
-          success: false,
-          message: "Failed to like destination",
-          error: err.message,
-        });
       }
-    });
+    );
+
+    // API route to delete a destination
+    app.delete(
+      "/destinations/:id",
+      verifyToken,
+      verifyUserRole("Host", "Admin"),
+      async (req, res) => {
+        try {
+          const { id } = req.params;
+          const result = await spotsCollection.deleteOne({
+            _id: new ObjectId(id),
+          });
+          res.status(200).json({
+            success: true,
+            message: "Destination deleted successfully!",
+          });
+        } catch (err) {
+          console.error("Error in /destination/:id endpoint:", err);
+          res.status(500).json({
+            success: false,
+            message: "Failed to delete destination",
+            error: err.message,
+          });
+        }
+      }
+    );
+
+    // API route to like a destination
+    app.patch(
+      "/destinations/likes/:id",
+      verifyToken,
+      verifyUserRole("General", "Host", "Admin"),
+      async (req, res) => {
+        try {
+          const { id } = req.params;
+          const { uid } = req.body;
+
+          const isLiked = await spotsCollection.findOne({
+            _id: new ObjectId(id),
+            likes: uid,
+          });
+
+          if (isLiked) {
+            const result = await spotsCollection.updateOne(
+              { _id: new ObjectId(id) },
+              { $pull: { likes: uid } }
+            );
+            return res.status(200).json({
+              success: true,
+              message: "Destination unliked successfully!",
+            });
+          }
+          const result = await spotsCollection.updateOne(
+            { _id: new ObjectId(id) },
+            { $push: { likes: uid } }
+          );
+          res.status(200).json({
+            success: true,
+            message: "Destination liked successfully!",
+          });
+        } catch (err) {
+          console.error("Error in /destinations/likes/:id endpoint:", err);
+          res.status(500).json({
+            success: false,
+            message: "Failed to like destination",
+            error: err.message,
+          });
+        }
+      }
+    );
 
     // API route to get weather data
-    app.get("/weather", async (req, res) => {
-      try {
-        const { city, lat, lon } = req.query;
+    app.get(
+      "/weather",
+      verifyToken,
+      verifyUserRole("General", "Host", "Admin"),
+      async (req, res) => {
+        try {
+          const { city, lat, lon } = req.query;
 
-        if (
-          (!city && (!lat || !lon)) ||
-          (city && (!lat || !lon)) ||
-          (!city && lat && lon)
-        ) {
-          return res.status(400).json({
+          if (
+            (!city && (!lat || !lon)) ||
+            (city && (!lat || !lon)) ||
+            (!city && lat && lon)
+          ) {
+            return res.status(400).json({
+              success: false,
+              message:
+                "Please provide either city name OR latitude and longitude",
+            });
+          }
+
+          const apiKey = process.env.OPENWEATHER_API_KEY;
+          if (!apiKey) {
+            throw new Error("OpenWeather API key is not configured");
+          }
+
+          let url = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&units=metric`;
+
+          if (city) {
+            url += `&q=${encodeURIComponent(city)}`;
+          } else {
+            url += `&lat=${lat}&lon=${lon}`;
+          }
+
+          const response = await axios.get(url);
+
+          const weatherData = {
+            temp: Math.round(response?.data?.main?.temp),
+            feels_like: Math.round(response?.data?.main?.feels_like),
+            condition: response?.data?.weather?.[0]?.main,
+            description: response?.data?.weather?.[0]?.description,
+            humidity: response?.data?.main?.humidity,
+            wind_speed: Math.round(response?.data?.wind?.speed * 3.6),
+            timezone: response?.data?.timezone,
+            date_time: response?.data?.dt,
+            city: response?.data?.name,
+            country: response?.data?.sys?.country,
+            sunrise: response?.data?.sys?.sunrise,
+            sunset: response?.data?.sys?.sunset,
+          };
+
+          res.json({
+            success: true,
+            data: weatherData,
+          });
+        } catch (error) {
+          console.error("Weather API error:", error.message);
+          const status = error.response?.status || 500;
+          const message =
+            error.response?.data?.message || "Failed to fetch weather data";
+          res.status(status).json({
             success: false,
-            message:
-              "Please provide either city name OR latitude and longitude",
+            message: message,
           });
         }
-
-        const apiKey = process.env.OPENWEATHER_API_KEY;
-        if (!apiKey) {
-          throw new Error("OpenWeather API key is not configured");
-        }
-
-        let url = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&units=metric`;
-
-        if (city) {
-          url += `&q=${encodeURIComponent(city)}`;
-        } else {
-          url += `&lat=${lat}&lon=${lon}`;
-        }
-
-        const response = await axios.get(url);
-
-        const weatherData = {
-          temp: Math.round(response?.data?.main?.temp),
-          feels_like: Math.round(response?.data?.main?.feels_like),
-          condition: response?.data?.weather?.[0]?.main,
-          description: response?.data?.weather?.[0]?.description,
-          humidity: response?.data?.main?.humidity,
-          wind_speed: Math.round(response?.data?.wind?.speed * 3.6),
-          timezone: response?.data?.timezone,
-          date_time: response?.data?.dt,
-          city: response?.data?.name,
-          country: response?.data?.sys?.country,
-          sunrise: response?.data?.sys?.sunrise,
-          sunset: response?.data?.sys?.sunset,
-        };
-
-        res.json({
-          success: true,
-          data: weatherData,
-        });
-      } catch (error) {
-        console.error("Weather API error:", error.message);
-        const status = error.response?.status || 500;
-        const message =
-          error.response?.data?.message || "Failed to fetch weather data";
-        res.status(status).json({
-          success: false,
-          message: message,
-        });
       }
-    });
+    );
 
     // API route to submit host request
-    app.put("/hosts", async (req, res) => {
-      try {
-        const { uid } = req.body;
-        const result = await usersCollection.updateOne(
-          { uid },
-          {
-            $set: {
-              isHostRequest: true,
-              hostRequestedAt: new Date().toISOString(),
-            },
-          }
-        );
-        res.status(200).json({
-          success: true,
-          message: "Host request processed successfully!",
-        });
-      } catch (error) {
-        console.error("Error processing host request:", error);
-        res.status(500).json({
-          success: false,
-          message: "Failed to process host request",
-          error: error.message,
-        });
+    app.put(
+      "/hosts",
+      verifyToken,
+      verifyUserRole("General"),
+      async (req, res) => {
+        try {
+          const { uid } = req.body;
+          const result = await usersCollection.updateOne(
+            { uid },
+            {
+              $set: {
+                isHostRequest: true,
+                hostRequestedAt: new Date().toISOString(),
+              },
+            }
+          );
+          res.status(200).json({
+            success: true,
+            message: "Host request processed successfully!",
+          });
+        } catch (error) {
+          console.error("Error processing host request:", error);
+          res.status(500).json({
+            success: false,
+            message: "Failed to process host request",
+            error: error.message,
+          });
+        }
       }
-    });
+    );
 
     // API route to approve host request
-    app.put("/hosts/approve", async (req, res) => {
-      try {
-        const { uid } = req.body;
-        const result = await usersCollection.updateOne(
-          { uid },
-          {
-            $set: {
-              role: "Host",
-              isHostRequest: false,
-              hostApprovedAt: new Date().toISOString(),
-            },
-          }
-        );
-        res.status(200).json({
-          success: true,
-          message: "Host request approved successfully!",
-        });
-      } catch (error) {
-        console.error("Error approving host request:", error);
-        res.status(500).json({
-          success: false,
-          message: "Failed to approve host request",
-          error: error.message,
-        });
+    app.put(
+      "/hosts/approve",
+      verifyToken,
+      verifyUserRole("Admin"),
+      async (req, res) => {
+        try {
+          const { uid } = req.body;
+          const result = await usersCollection.updateOne(
+            { uid },
+            {
+              $set: {
+                role: "Host",
+                isHostRequest: false,
+                hostApprovedAt: new Date().toISOString(),
+              },
+            }
+          );
+          res.status(200).json({
+            success: true,
+            message: "Host request approved successfully!",
+          });
+        } catch (error) {
+          console.error("Error approving host request:", error);
+          res.status(500).json({
+            success: false,
+            message: "Failed to approve host request",
+            error: error.message,
+          });
+        }
       }
-    });
+    );
 
     // API route to reject host request
-    app.put("/hosts/reject", async (req, res) => {
-      try {
-        const { uid } = req.body;
-        const result = await usersCollection.updateOne(
-          { uid },
-          {
-            $set: {
-              isHostRequest: false,
-              hostRejectedAt: new Date().toISOString(),
-            },
-          }
-        );
-        res.status(200).json({
-          success: true,
-          message: "Host request rejected successfully!",
-        });
-      } catch (error) {
-        console.error("Error rejecting host request:", error);
-        res.status(500).json({
-          success: false,
-          message: "Failed to reject host request",
-          error: error.message,
-        });
+    app.put(
+      "/hosts/reject",
+      verifyToken,
+      verifyUserRole("Admin"),
+      async (req, res) => {
+        try {
+          const { uid } = req.body;
+          const result = await usersCollection.updateOne(
+            { uid },
+            {
+              $set: {
+                isHostRequest: false,
+                hostRejectedAt: new Date().toISOString(),
+              },
+            }
+          );
+          res.status(200).json({
+            success: true,
+            message: "Host request rejected successfully!",
+          });
+        } catch (error) {
+          console.error("Error rejecting host request:", error);
+          res.status(500).json({
+            success: false,
+            message: "Failed to reject host request",
+            error: error.message,
+          });
+        }
       }
-    });
+    );
 
     // API route to add a new subscriber
     app.post("/newsletter/subscribe", async (req, res) => {
@@ -619,116 +679,141 @@ async function run() {
     });
 
     // API route to get the admin stats
-    app.get("/admin/stats", async (req, res) => {
-      try {
-        const totalDestinations = await spotsCollection.countDocuments();
-        const destinations = await spotsCollection.find({}).toArray();
-        const totalLikes = destinations.reduce(
-          (total, destination) =>
-            total + (destination.likes ? destination.likes.length : 0),
-          0
-        );
-        const totalRegisteredUsers = await usersCollection.countDocuments();
-        const totalHosts = await usersCollection.countDocuments({
-          role: "Host",
-        });
-        res.status(200).json({
-          success: true,
-          message: "Admin stats fetched successfully!",
-          data: {
-            totalDestinations,
-            totalLikes,
-            totalRegisteredUsers,
-            totalHosts,
-          },
-        });
-      } catch (error) {
-        console.error("Error fetching admin stats:", error);
-        res.status(500).json({
-          success: false,
-          message: "Failed to fetch admin stats",
-          error: error.message,
-        });
+    app.get(
+      "/admin/stats",
+      verifyToken,
+      verifyUserRole("Admin"),
+      async (req, res) => {
+        try {
+          const totalDestinations = await spotsCollection.countDocuments();
+          const destinations = await spotsCollection.find({}).toArray();
+          const totalLikes = destinations.reduce(
+            (total, destination) =>
+              total + (destination.likes ? destination.likes.length : 0),
+            0
+          );
+          const totalRegisteredUsers = await usersCollection.countDocuments();
+          const totalHosts = await usersCollection.countDocuments({
+            role: "Host",
+          });
+          res.status(200).json({
+            success: true,
+            message: "Admin stats fetched successfully!",
+            data: {
+              totalDestinations,
+              totalLikes,
+              totalRegisteredUsers,
+              totalHosts,
+            },
+          });
+        } catch (error) {
+          console.error("Error fetching admin stats:", error);
+          res.status(500).json({
+            success: false,
+            message: "Failed to fetch admin stats",
+            error: error.message,
+          });
+        }
       }
-    });
+    );
 
     // API route to get all destinations
-    app.get("/admin/destinations", async (req, res) => {
-      try {
-        const destinations = await spotsCollection.find({}).toArray();
-        res.status(200).json({
-          success: true,
-          message: "Destinations fetched successfully!",
-          data: destinations,
-        });
-      } catch (error) {
-        console.error("Error fetching destinations:", error);
-        res.status(500).json({
-          success: false,
-          message: "Failed to fetch destinations",
-          error: error.message,
-        });
+    app.get(
+      "/admin/destinations",
+      verifyToken,
+      verifyUserRole("Admin"),
+      async (req, res) => {
+        try {
+          const destinations = await spotsCollection.find({}).toArray();
+          res.status(200).json({
+            success: true,
+            message: "Destinations fetched successfully!",
+            data: destinations,
+          });
+        } catch (error) {
+          console.error("Error fetching destinations:", error);
+          res.status(500).json({
+            success: false,
+            message: "Failed to fetch destinations",
+            error: error.message,
+          });
+        }
       }
-    });
+    );
 
     // API route to get all users
-    app.get("/admin/users", async (req, res) => {
-      try {
-        const users = await usersCollection.find({}).toArray();
-        res.status(200).json({
-          success: true,
-          message: "Users fetched successfully!",
-          data: users,
-        });
-      } catch (error) {
-        console.error("Error fetching users:", error);
-        res.status(500).json({
-          success: false,
-          message: "Failed to fetch users",
-          error: error.message,
-        });
+    app.get(
+      "/admin/users",
+      verifyToken,
+      verifyUserRole("Admin"),
+      async (req, res) => {
+        try {
+          const users = await usersCollection.find({}).toArray();
+          res.status(200).json({
+            success: true,
+            message: "Users fetched successfully!",
+            data: users,
+          });
+        } catch (error) {
+          console.error("Error fetching users:", error);
+          res.status(500).json({
+            success: false,
+            message: "Failed to fetch users",
+            error: error.message,
+          });
+        }
       }
-    });
+    );
 
     // API route to get all hosts
-    app.get("/admin/hosts", async (req, res) => {
-      try {
-        const hosts = await usersCollection.find({ role: "Host" }).toArray();
-        res.status(200).json({
-          success: true,
-          message: "Hosts fetched successfully!",
-          data: hosts,
-        });
-      } catch (error) {
-        console.error("Error fetching hosts:", error);
-        res.status(500).json({
-          success: false,
-          message: "Failed to fetch hosts",
-          error: error.message,
-        });
+    app.get(
+      "/admin/hosts",
+      verifyToken,
+      verifyUserRole("Admin"),
+      async (req, res) => {
+        try {
+          const hosts = await usersCollection.find({ role: "Host" }).toArray();
+          res.status(200).json({
+            success: true,
+            message: "Hosts fetched successfully!",
+            data: hosts,
+          });
+        } catch (error) {
+          console.error("Error fetching hosts:", error);
+          res.status(500).json({
+            success: false,
+            message: "Failed to fetch hosts",
+            error: error.message,
+          });
+        }
       }
-    });
+    );
 
     // API route to get all newsletter subscribers
-    app.get("/admin/newsletter", async (req, res) => {
-      try {
-        const subscribers = await newsletterSubscribersCollection
-          .find({})
-          .toArray();
-        res.status(200).json({
-          success: true,
-          message: "Subscribers fetched successfully!",
-          data: subscribers,
-        });
-      } catch (error) {
-        console.error("Error fetching subscribers:", error);
-        res.status(500).json({
-          success: false,
-          message: "Failed to fetch subscribers",
-          error: error.message,
-        });
+    app.get(
+      "/admin/newsletter",
+      verifyToken,
+      verifyUserRole("Admin"),
+      async (req, res) => {
+        try {
+          const subscribers = await newsletterSubscribersCollection
+            .find({})
+            .toArray();
+          res.status(200).json({
+            success: true,
+            message: "Subscribers fetched successfully!",
+            data: subscribers,
+          });
+        } catch (error) {
+          console.error("Error fetching subscribers:", error);
+          res.status(500).json({
+            success: false,
+            message: "Failed to fetch subscribers",
+            error: error.message,
+          });
+        }
       }
-    });
+    );
 
     console.log("Connected to MongoDB successfully!");
   } catch (err) {

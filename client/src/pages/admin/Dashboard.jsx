@@ -5,7 +5,7 @@ import DestinationDataTable from "../../components/admin/DestinationDataTable";
 import { FaHeart } from "react-icons/fa";
 import UserDataTable from "../../components/admin/UserDataTable";
 import HostDataTable from "../../components/admin/HostDataTable";
-import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import toast from "react-hot-toast";
@@ -16,13 +16,13 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("destinations");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedDestination, setSelectedDestination] = useState(null);
-  const axiosCommon = useAxiosCommon();
+  const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
 
   const { data: stats = {}, isLoading } = useQuery({
     queryKey: ["stats"],
     queryFn: async () => {
-      const { data } = await axiosCommon.get("/admin/stats");
+      const { data } = await axiosSecure.get("/admin/stats");
       return data.data;
     },
   });
@@ -30,7 +30,7 @@ export default function AdminDashboard() {
   const { data: destinations = [], isLoading: destinationsLoading } = useQuery({
     queryKey: ["destinations"],
     queryFn: async () => {
-      const { data } = await axiosCommon.get("/admin/destinations");
+      const { data } = await axiosSecure.get("/admin/destinations");
       return data.data;
     },
   });
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
   const { data: users = [], isLoading: usersLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const { data } = await axiosCommon.get("/admin/users");
+      const { data } = await axiosSecure.get("/admin/users");
       return data.data;
     },
   });
@@ -46,7 +46,7 @@ export default function AdminDashboard() {
   const { data: hosts = [], isLoading: hostsLoading } = useQuery({
     queryKey: ["hosts"],
     queryFn: async () => {
-      const { data } = await axiosCommon.get("/admin/hosts");
+      const { data } = await axiosSecure.get("/admin/hosts");
       return data.data;
     },
   });
@@ -54,7 +54,7 @@ export default function AdminDashboard() {
   const { data: subscribers = [], isLoading: subscribersLoading } = useQuery({
     queryKey: ["subscribers"],
     queryFn: async () => {
-      const { data } = await axiosCommon.get("/admin/newsletter");
+      const { data } = await axiosSecure.get("/admin/newsletter");
       return data.data;
     },
   });
@@ -62,7 +62,7 @@ export default function AdminDashboard() {
   const { mutateAsync: approveHost, isLoading: approveHostLoading } =
     useMutation({
       mutationFn: async (uid) => {
-        const { data } = await axiosCommon.put("/hosts/approve", { uid });
+        const { data } = await axiosSecure.put("/hosts/approve", { uid });
         return data;
       },
       onSuccess: () => {
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
   const { mutateAsync: rejectHost, isLoading: rejectHostLoading } = useMutation(
     {
       mutationFn: async (uid) => {
-        const { data } = await axiosCommon.put("/hosts/reject", { uid });
+        const { data } = await axiosSecure.put("/hosts/reject", { uid });
         return data;
       },
       onSuccess: () => {
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
     isLoading: deleteDestinationLoading,
   } = useMutation({
     mutationFn: async (id) => {
-      const { data } = await axiosCommon.delete(`/destinations/${id}`);
+      const { data } = await axiosSecure.delete(`/destinations/${id}`);
       return data;
     },
     onSuccess: () => {

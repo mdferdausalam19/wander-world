@@ -7,7 +7,7 @@ import DeleteDestinationModal from "../../components/user/DeleteDestinationModal
 import EditDestinationModal from "../../components/user/EditDestinationModal";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import toast from "react-hot-toast";
-import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
@@ -17,21 +17,21 @@ export default function MyList() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedDestination, setSelectedDestination] = useState(null);
   const { user, isLoading: userLoading } = useAuth();
-  const axiosCommon = useAxiosCommon();
+  const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
 
   const { data: spots = [], isLoading: spotsLoading } = useQuery({
     queryKey: ["spots", user?.uid],
     enabled: !!user?.uid && !userLoading,
     queryFn: async () => {
-      const { data } = await axiosCommon.get(`/destinations/user/${user?.uid}`);
+      const { data } = await axiosSecure.get(`/destinations/user/${user?.uid}`);
       return data.data;
     },
   });
 
   const { mutateAsync: updateDestination } = useMutation({
     mutationFn: async (destination) => {
-      const { data } = await axiosCommon.put(
+      const { data } = await axiosSecure.put(
         `/destinations/${destination._id}`,
         destination
       );
@@ -44,14 +44,14 @@ export default function MyList() {
       toast.success("Destination updated successfully!");
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
       toast.error("Failed to update destination");
     },
   });
 
   const { mutateAsync: deleteDestination } = useMutation({
     mutationFn: async (destination) => {
-      const { data } = await axiosCommon.delete(
+      const { data } = await axiosSecure.delete(
         `/destinations/${destination._id}`
       );
       return data.data;
@@ -63,7 +63,7 @@ export default function MyList() {
       toast.success("Destination deleted successfully!");
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
       toast.error("Failed to delete destination");
     },
   });

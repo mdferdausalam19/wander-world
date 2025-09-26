@@ -1,18 +1,18 @@
 import SpotForm from "../../components/form/SpotForm";
 import { toast } from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
-import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
 
 export default function AddTouristSpot() {
   const { user } = useAuth();
-  const axiosCommon = useAxiosCommon();
+  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
 
   const { mutateAsync: addSpot, isLoading } = useMutation({
     mutationFn: async (spotInfo) => {
-      const { data } = await axiosCommon.post("/destinations", spotInfo);
+      const { data } = await axiosSecure.post("/destinations", spotInfo);
       return data;
     },
     onSuccess: (data) => {

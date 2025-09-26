@@ -3,7 +3,7 @@ import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import { TbFidgetSpinner } from "react-icons/tb";
-import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import HostModal from "../../components/host/HostModal";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,7 +16,7 @@ export default function UserProfile() {
   const [hostModalOpen, setHostModalOpen] = useState(false);
   const { user, updateUserProfile, loading, setLoading } = useAuth();
   const { role, isLoading: roleLoading } = useRole();
-  const axiosCommon = useAxiosCommon();
+  const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [isHost, setIsHost] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,7 +33,7 @@ export default function UserProfile() {
     try {
       setLoading(true);
       await updateUserProfile(displayName, photoURL);
-      await axiosCommon.put(`/users/${user.uid}`, {
+      await axiosSecure.put(`/users/${user.uid}`, {
         name: displayName,
         avatar: photoURL,
       });
@@ -51,7 +51,7 @@ export default function UserProfile() {
     useQuery({
       queryKey: ["host-request", user.uid],
       queryFn: async () => {
-        const { data } = await axiosCommon.get(`/users/${user.uid}`);
+        const { data } = await axiosSecure.get(`/users/${user.uid}`);
         if (data.data.role === "Host") {
           setIsHost(true);
         }
@@ -64,7 +64,7 @@ export default function UserProfile() {
 
   const { mutateAsync: hostRequest } = useMutation({
     mutationFn: async () => {
-      const { data } = await axiosCommon.put(`/hosts`, {
+      const { data } = await axiosSecure.put(`/hosts`, {
         uid: user.uid,
       });
       return data;

@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router";
 import { FaMapMarkerAlt, FaArrowLeft, FaHeart } from "react-icons/fa";
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
 import WeatherWidget from "../../components/weather/WeatherWidget";
-import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
@@ -25,7 +25,7 @@ const formatTravelTime = (travelTime) => {
 export default function TouristSpotDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const axiosCommon = useAxiosCommon();
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [likeStatus, setLikeStatus] = useState(false);
   const queryClient = useQueryClient();
@@ -34,7 +34,7 @@ export default function TouristSpotDetails() {
     queryKey: ["spot", id],
     enabled: !!id,
     queryFn: async () => {
-      const { data } = await axiosCommon.get(`/destinations/${id}`);
+      const { data } = await axiosSecure.get(`/destinations/${id}`);
       setLikeStatus(data.data.likes.includes(user?.uid));
       return data.data;
     },
@@ -42,7 +42,7 @@ export default function TouristSpotDetails() {
 
   const { mutateAsync: likeSpot, isLoading: isLikeLoading } = useMutation({
     mutationFn: async () => {
-      const { data } = await axiosCommon.patch(`/destinations/likes/${id}`, {
+      const { data } = await axiosSecure.patch(`/destinations/likes/${id}`, {
         uid: user?.uid,
       });
       return data;
